@@ -1,0 +1,32 @@
+{
+  "name": "resume-builder-rest-api",
+  "version": "0.0.0",
+  "description": "A RESTful API for building and managing professional resumes.",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file=.env app.js",
+    "dev": "node --watch --trace-warnings --env-file=.env app.js",
+    "test": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theomaro/resume-builder-rest-api.git"
+  },
+  "keywords": [
+    "resume-builder",
+    "resume-builder-api",
+    "resume-builder-rest-api"
+  ],
+  "author": "theomaro",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/theomaro/resume-builder-rest-api/issues"
+  },
+  "homepage": "https://github.com/theomaro/resume-builder-rest-api#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "express": "^5.1.0",
+    "mongoose": "^8.13.2"
+  }
+}
