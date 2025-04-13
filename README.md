@@ -38,3 +38,20 @@ git clone https://github.com/theomaro/resume-builder-rest-api.git
 cd resume-builder-rest-api
 npm install
 ```
+
+## API Endpoints Overview
+
+---
+
+### 📄 Resume API Endpoints
+
+| Method | Endpoint           | Description           |
+| ------ | ------------------ | --------------------- |
+| POST   | `/api/resumes/`    | Create a new resume   |
+| GET    | `/api/resumes/:id` | Get a resume by ID    |
+| PATCH  | `/api/resumes/:id` | Update a resume by ID |
+| DELETE | `/api/resumes/:id` | Delete a resume by ID |
+
+> 🔗 For detailed API documentation, 👉 [resume.md](./docs/resume.md)
+
+---
