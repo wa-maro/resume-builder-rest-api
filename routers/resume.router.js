@@ -5,6 +5,7 @@ import {
   getResume,
   updateResume,
 } from "../controllers/resume.controller.js";
+import personalDetailRouter from "./personalDetail.router.js";
 
 const resumeRouter = Router();
 
@@ -13,5 +14,7 @@ resumeRouter
   .get("/:id", getResume)
   .patch("/:id", updateResume)
   .delete("/:id", deleteResume);
+
+resumeRouter.use("/:resumeId/personal-detail", personalDetailRouter);
 
 export default resumeRouter;

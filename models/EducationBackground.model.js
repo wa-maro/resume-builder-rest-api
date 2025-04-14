@@ -57,7 +57,7 @@ const educationQualificationsSchema = new mongoose.Schema(
   }
 );
 
-const professionalQualificationsSchema = new mongoose.Schema(
+const professionQualificationsSchema = new mongoose.Schema(
   {
     institutionName: { type: String, required: true, trim: true },
     qualification: {
@@ -129,7 +129,7 @@ const EducationBackgroundSchema = new mongoose.Schema({
     unique: true,
   },
   educationQualifications: [educationQualificationsSchema],
-  professionalQualifications: [professionalQualificationsSchema],
+  professionQualifications: [professionQualificationsSchema],
 });
 
 const EducationBackground = mongoose.model(
