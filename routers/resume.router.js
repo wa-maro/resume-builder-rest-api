@@ -7,6 +7,7 @@ import {
 } from "../controllers/resume.controller.js";
 import personalDetailRouter from "./personalDetail.router.js";
 import educationQualificationsRouter from "./educationQualifications.router.js";
+import professionQualificationsRouter from "./professionQualifications.router.js";
 
 const resumeRouter = Router();
 
@@ -18,6 +19,7 @@ resumeRouter
 
 resumeRouter
   .use("/:resumeId/personal-detail", personalDetailRouter)
-  .use("/:resumeId/education-qualifications", educationQualificationsRouter);
+  .use("/:resumeId/education-qualifications", educationQualificationsRouter)
+  .use("/:resumeId/profession-qualifications", professionQualificationsRouter);
 
 export default resumeRouter;
