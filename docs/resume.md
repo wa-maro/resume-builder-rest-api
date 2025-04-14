@@ -1,5 +1,7 @@
 ## 📝 Resume API Endpoints
 
+These endpoints allow you to manage the resume itself, which acts as the central entity linking together all sections like personal details, education, work experience, skills, referees, and more. Each user can have one resume.
+
 ---
 
 ### 1. **POST /api/v0/resumes/**

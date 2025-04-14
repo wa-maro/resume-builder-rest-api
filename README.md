@@ -45,13 +45,29 @@ npm install
 
 ### 📄 Resume API Endpoints
 
-| Method | Endpoint           | Description           |
-| ------ | ------------------ | --------------------- |
-| POST   | `/api/resumes/`    | Create a new resume   |
-| GET    | `/api/resumes/:id` | Get a resume by ID    |
-| PATCH  | `/api/resumes/:id` | Update a resume by ID |
-| DELETE | `/api/resumes/:id` | Delete a resume by ID |
+These endpoints allow you to manage the resume itself, which acts as the central entity linking together all sections like personal details, education, work experience, skills, referees, and more. Each user can have one resume.
+
+| Method | Endpoint              | Description           |
+| ------ | --------------------- | --------------------- |
+| POST   | `/api/v0/resumes/`    | Create a new resume   |
+| GET    | `/api/v0/resumes/:id` | Get a resume by ID    |
+| PATCH  | `/api/v0/resumes/:id` | Update a resume by ID |
+| DELETE | `/api/v0/resumes/:id` | Delete a resume by ID |
 
 > 🔗 For detailed API documentation, 👉 [resume.md](./docs/resume.md)
+
+---
+
+#### 🧍 Personal Detail API Endpoints
+
+These endpoints allow you to manage the personal detail section of a resume. Each resume can have one associated personal detail.
+
+| Method | Endpoint                                        | Description                     |
+| ------ | ----------------------------------------------- | ------------------------------- |
+| POST   | `/api/v0/resumes/:resumeId/personal-detail/`    | Add personal detail to a resume |
+| GET    | `/api/v0/resumes/:resumeId/personal-detail/:id` | Get personal detail by ID       |
+| PATCH  | `/api/v0/resumes/:resumeId/personal-detail/:id` | Update personal detail by ID    |
+
+> 🔗 For detailed API documentation, 👉 [personal-detail.md](./docs/personal-detail.md)
 
 ---
