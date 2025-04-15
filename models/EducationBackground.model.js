@@ -47,7 +47,6 @@ const educationQualificationsSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true,
     validate: {
       validator: function () {
         return this.startYear <= this.endYear;
@@ -111,7 +110,6 @@ const professionQualificationsSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true,
     validate: {
       validator: function () {
         return this.startYear <= this.endYear;
@@ -121,16 +119,19 @@ const professionQualificationsSchema = new mongoose.Schema(
   }
 );
 
-const EducationBackgroundSchema = new mongoose.Schema({
-  resume: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Resume",
-    required: true,
-    unique: true,
+const EducationBackgroundSchema = new mongoose.Schema(
+  {
+    resume: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Resume",
+      required: true,
+      unique: true,
+    },
+    educationQualifications: [educationQualificationsSchema],
+    professionQualifications: [professionQualificationsSchema],
   },
-  educationQualifications: [educationQualificationsSchema],
-  professionQualifications: [professionQualificationsSchema],
-});
+  { timestamps: true }
+);
 
 const EducationBackground = mongoose.model(
   "EducationBackground",

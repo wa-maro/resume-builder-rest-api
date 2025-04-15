@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-  addEducationQualification,
+  addEducationQualifications,
   deleteEducationQualification,
   getEducationQualifications,
   updateEducationQualification,
@@ -9,7 +9,7 @@ import {
 const educationQualificationsRouter = Router({ mergeParams: true });
 
 educationQualificationsRouter
-  .post("/", addEducationQualification)
+  .post("/", addEducationQualifications)
   .get("/", getEducationQualifications)
   .patch("/:id", updateEducationQualification)
   .delete("/:id", deleteEducationQualification);

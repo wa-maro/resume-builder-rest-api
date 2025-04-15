@@ -1,16 +1,60 @@
 import EducationBackground from "../models/EducationBackground.model.js";
+import Resume from "../models/Resume.model.js";
 
-export const addEducationQualification = async (req, res, next) => {
+export const addEducationQualifications = async (req, res, next) => {
+  const newQualifications = req.body.educationQualifications;
+  const resumeId = req.params.resumeId;
+
   try {
-    // Extract resumeId from route params and data from req.body
-    // Find or create EducationBackground for the resume
-    // Check for existing level (enforce one per level)
-    // Push or update qualification
-    // Save and return success response
+    // check if resume exists
+    const resume = await Resume.findById(resumeId);
+    if (!resume)
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: "Resume doesn't exists",
+      });
+
+    // check if education background exists for given resume
+    let educationBackground = await EducationBackground.findOne({
+      resume: resumeId,
+    });
+
+    if (!educationBackground)
+      educationBackground = new EducationBackground({
+        resume: resumeId,
+        educationQualifications: [],
+        professionalQualifications: [],
+      });
+
+    // create a map of existing qualifications by level
+    const existingQualifications = new Map();
+    for (const qualification of educationBackground.educationQualifications) {
+      existingQualifications.set(qualification.level, qualification);
+    }
+
+    // add or update while generating new or preserving _id
+    for (const qualification of newQualifications) {
+      const existing = existingQualifications.get(qualification.level);
+      if (existing)
+        existingQualifications.set(qualification.level, {
+          ...qualification,
+          _id: existing._id,
+        });
+      else existingQualifications.set(qualification.level, qualification);
+    }
+
+    // update array and save changes
+    educationBackground.educationQualifications = Array.from(
+      existingQualifications.values()
+    );
+    const savedEducationBackground = await educationBackground.save();
+
+    // return json response
     res.status(201).json({
       success: true,
       message: "Education qualification added successfully",
-      data: {}, // return the updated qualification or background
+      educationQualifications: savedEducationBackground.educationQualifications,
     });
   } catch (error) {
     next(error);
