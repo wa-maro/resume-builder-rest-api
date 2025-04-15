@@ -67,13 +67,12 @@ export const getEducationQualifications = async (req, res, next) => {
   try {
     // Check if the resume exists
     const resume = await Resume.findById(resumeId);
-    if (!resume) {
+    if (!resume)
       return res.status(404).json({
         success: false,
         error: "Not Found",
         message: "Resume doesn't exist",
       });
-    }
 
     // get education background by resume id and return it
     const educationBackground = await EducationBackground.findOne({
@@ -99,38 +98,35 @@ export const updateEducationQualification = async (req, res, next) => {
   try {
     // Check if resume exists
     const resume = await Resume.findById(resumeId);
-    if (!resume) {
+    if (!resume)
       return res.status(404).json({
         success: false,
         error: "Not Found",
         message: "Resume doesn't exist",
       });
-    }
 
     // Find the education background for this resume
     const educationBackground = await EducationBackground.findOne({
       resume: resumeId,
     });
-    if (!educationBackground) {
+    if (!educationBackground)
       return res.status(404).json({
         success: false,
         error: "Not Found",
         message: "Education background not found",
       });
-    }
 
     // Find the index of the qualification to update
     const index = educationBackground.educationQualifications.findIndex(
       (qualification) => qualification._id.equals(id)
     );
 
-    if (index === -1) {
+    if (index === -1)
       return res.status(404).json({
         success: false,
         error: "Not Found",
         message: `Education qualification not found`,
       });
-    }
 
     // Preserve the original _id and update the qualification
     educationBackground.educationQualifications[index] = {
@@ -145,7 +141,58 @@ export const updateEducationQualification = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "Education qualification updated successfully",
-      data: savedEducationBackground.educationQualifications[index]._doc,
+      educationQualification:
+        savedEducationBackground.educationQualifications[index]._doc,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteEducationQualification = async (req, res, next) => {
+  const { resumeId, id } = req.params;
+
+  try {
+    // Check if resume exists
+    const resume = await Resume.findById(resumeId);
+    if (!resume)
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: "Resume doesn't exist",
+      });
+
+    // Find the education background for this resume
+    const educationBackground = await EducationBackground.findOne({
+      resume: resumeId,
+    });
+    if (!educationBackground)
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: "Education background doesn't exist",
+      });
+
+    // Filter out the qualification by id and save
+    const originalLength = educationBackground.educationQualifications.length;
+    educationBackground.educationQualifications =
+      educationBackground.educationQualifications.filter((qualification) =>
+        qualification._id.equals(id)
+      );
+
+    if (educationBackground.educationQualifications.length === originalLength)
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: `Qualification doesn't exist`,
+      });
+
+    await educationBackground.save();
+
+    // return json response
+    res.status(200).json({
+      success: true,
+      message: "Education qualification deleted successfully",
     });
   } catch (error) {
     next(error);
