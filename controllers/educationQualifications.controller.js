@@ -93,28 +93,59 @@ export const getEducationQualifications = async (req, res, next) => {
 };
 
 export const updateEducationQualification = async (req, res, next) => {
+  const { resumeId, id } = req.params;
+  const updatedData = req.body;
+
   try {
-    // Extract resumeId and level from route
-    // Find and update matching qualification in the array
+    // Check if resume exists
+    const resume = await Resume.findById(resumeId);
+    if (!resume) {
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: "Resume doesn't exist",
+      });
+    }
+
+    // Find the education background for this resume
+    const educationBackground = await EducationBackground.findOne({
+      resume: resumeId,
+    });
+    if (!educationBackground) {
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: "Education background not found",
+      });
+    }
+
+    // Find the index of the qualification to update
+    const index = educationBackground.educationQualifications.findIndex(
+      (qualification) => qualification._id.equals(id)
+    );
+
+    if (index === -1) {
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: `Education qualification not found`,
+      });
+    }
+
+    // Preserve the original _id and update the qualification
+    educationBackground.educationQualifications[index] = {
+      ...educationBackground.educationQualifications[index]._doc,
+      ...updatedData,
+    };
+
+    // Save changes
+    const savedEducationBackground = await educationBackground.save();
+
     // Save and return success response
     res.status(200).json({
       success: true,
       message: "Education qualification updated successfully",
-      data: {}, // updated qualification
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const deleteEducationQualification = async (req, res, next) => {
-  try {
-    // Extract resumeId and level from route
-    // Pull out matching entry from the array
-    // Save and return success response
-    res.status(200).json({
-      success: true,
-      message: "Education qualification deleted successfully",
+      data: savedEducationBackground.educationQualifications[index]._doc,
     });
   } catch (error) {
     next(error);
