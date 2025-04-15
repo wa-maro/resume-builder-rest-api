@@ -62,13 +62,30 @@ export const addEducationQualifications = async (req, res, next) => {
 };
 
 export const getEducationQualifications = async (req, res, next) => {
+  const resumeId = req.params.resumeId;
+
   try {
-    // Fetch the education background document by resumeId
-    // Return only educationQualifications array in the response
-    res.status(201).json({
+    // Check if the resume exists
+    const resume = await Resume.findById(resumeId);
+    if (!resume) {
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: "Resume doesn't exist",
+      });
+    }
+
+    // get education background by resume id and return it
+    const educationBackground = await EducationBackground.findOne({
+      resume: resumeId,
+    });
+
+    // Return json response
+    res.status(200).json({
       success: true,
       message: "Education qualifications retrieved successfully",
-      data: [{}], // return the all education qualifications
+      educationQualifications:
+        educationBackground?.educationQualifications || [],
     });
   } catch (error) {
     next(error);
