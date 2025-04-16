@@ -124,6 +124,27 @@ export const deleteWorkExperience = async (req, res, next) => {
   const { resumeId, id } = req.params;
 
   try {
+    // Check if resume exists
+    const resume = await Resume.findById(resumeId);
+    if (!resume)
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: "Resume doesn't exist",
+      });
+
+    // check if work experience for this resume exists
+    const workExperience = await WorkExperience.findOneAndDelete({
+      resume: resumeId,
+      _id: id,
+    });
+    if (!workExperience)
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: "Work experience doesn't exist",
+      });
+
     // return json response
     res.status(200).json({
       success: true,
