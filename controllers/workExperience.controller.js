@@ -83,10 +83,36 @@ export const updateWorkExperience = async (req, res, next) => {
   const updatedExperience = req.body;
 
   try {
+    // Check if resume exists
+    const resume = await Resume.findById(resumeId);
+    if (!resume)
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: "Resume doesn't exist",
+      });
+
+    // check if work experience for this resume exists
+    const workExperience = await WorkExperience.findOneAndUpdate(
+      {
+        resume: resumeId,
+        _id: id,
+      },
+      { ...updatedExperience },
+      { new: true }
+    );
+    if (!workExperience)
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: "Work experience doesn't exist",
+      });
+
     // return json response
     res.status(200).json({
       success: true,
       message: "Work experience updated successfully",
+      workExperience,
     });
   } catch (error) {
     next(error);
