@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// define a Personal Detail schema
 const PersonalDetailSchema = new mongoose.Schema(
   {
     resume: {
@@ -60,6 +61,7 @@ const PersonalDetailSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// define a Personal Detail model
 const PersonalDetail = mongoose.model("PersonalDetail", PersonalDetailSchema);
 
 export default PersonalDetail;

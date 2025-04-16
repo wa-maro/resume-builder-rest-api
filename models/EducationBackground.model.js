@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// define a education qualification schema
 const educationQualificationsSchema = new mongoose.Schema(
   {
     level: {
@@ -56,6 +57,7 @@ const educationQualificationsSchema = new mongoose.Schema(
   }
 );
 
+// define a profession qualification schema
 const professionQualificationsSchema = new mongoose.Schema(
   {
     institutionName: { type: String, required: true, trim: true },
@@ -119,6 +121,7 @@ const professionQualificationsSchema = new mongoose.Schema(
   }
 );
 
+// define a Education Background schema
 const EducationBackgroundSchema = new mongoose.Schema(
   {
     resume: {
@@ -133,6 +136,7 @@ const EducationBackgroundSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// define a Education Background model
 const EducationBackground = mongoose.model(
   "EducationBackground",
   EducationBackgroundSchema
