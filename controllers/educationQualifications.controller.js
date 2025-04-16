@@ -1,6 +1,7 @@
 import EducationBackground from "../models/EducationBackground.model.js";
 import Resume from "../models/Resume.model.js";
 
+// add new education qualifications for a specific resume
 export const addEducationQualifications = async (req, res, next) => {
   const newQualifications = req.body.educationQualifications;
   const resumeId = req.params.resumeId;
@@ -60,6 +61,7 @@ export const addEducationQualifications = async (req, res, next) => {
   }
 };
 
+// get education qualifications for a specific resume
 export const getEducationQualifications = async (req, res, next) => {
   const resumeId = req.params.resumeId;
 
@@ -90,6 +92,7 @@ export const getEducationQualifications = async (req, res, next) => {
   }
 };
 
+// update education qualification for a specific resume
 export const updateEducationQualification = async (req, res, next) => {
   const { resumeId, id } = req.params;
   const updatedQualification = req.body;
@@ -148,6 +151,7 @@ export const updateEducationQualification = async (req, res, next) => {
   }
 };
 
+// add education qualification for a specific resume
 export const deleteEducationQualification = async (req, res, next) => {
   const { resumeId, id } = req.params;
 
