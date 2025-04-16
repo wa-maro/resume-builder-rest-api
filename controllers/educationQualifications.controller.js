@@ -19,7 +19,6 @@ export const addEducationQualifications = async (req, res, next) => {
     let educationBackground = await EducationBackground.findOne({
       resume: resumeId,
     });
-
     if (!educationBackground)
       educationBackground = new EducationBackground({
         resume: resumeId,
@@ -93,7 +92,7 @@ export const getEducationQualifications = async (req, res, next) => {
 
 export const updateEducationQualification = async (req, res, next) => {
   const { resumeId, id } = req.params;
-  const updatedData = req.body;
+  const updatedQualification = req.body;
 
   try {
     // Check if resume exists
@@ -131,7 +130,7 @@ export const updateEducationQualification = async (req, res, next) => {
     // Preserve the original _id and update the qualification
     educationBackground.educationQualifications[index] = {
       ...educationBackground.educationQualifications[index]._doc,
-      ...updatedData,
+      ...updatedQualification,
     };
 
     // Save changes
