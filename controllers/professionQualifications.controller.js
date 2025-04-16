@@ -107,14 +107,49 @@ export const getProfessionQualifications = async (req, res, next) => {
 };
 
 export const updateProfessionQualification = async (req, res, next) => {
+  const { resumeId, id } = req.params;
+  const updatedQualification = req.body;
+
   try {
-    // Extract resumeId and qualificationId from route
-    // Find the qualification in array and update fields
-    // Save and return response
+    // Check if resume exists
+    const resume = await Resume.findById(resumeId);
+    if (!resume)
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: "Resume doesn't exist",
+      });
+
+    // Find the education background for this resume
+    const educationBackground = await EducationBackground.findOne({
+      resume: resumeId,
+    });
+    if (!educationBackground)
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: "Education background doesn't exist",
+      });
+
+    // Find the qualification by ID
+    const qualification = educationBackground.professionQualifications.id(id);
+    if (!qualification) {
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: "Professional qualification not found",
+      });
+    }
+
+    // Update fields and save
+    Object.assign(qualification, updatedQualification);
+    await educationBackground.save();
+
+    // Return json response
     res.status(200).json({
       success: true,
       message: "Professional qualification updated successfully",
-      data: {}, // updated qualification
+      professionQualifications: educationBackground.professionQualifications,
     });
   } catch (error) {
     next(error);
