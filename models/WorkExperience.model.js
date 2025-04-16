@@ -71,6 +71,12 @@ WorkExperienceSchema.pre("save", function (next) {
   next();
 });
 
+// Prevent duplicate (resume, company, position, startDate)
+WorkExperienceSchema.index(
+  { resume: 1, company: 1, position: 1, startDate: 1 },
+  { unique: true }
+);
+
 // define Work Experience model
 const WorkExperience = mongoose.model("WorkExperience", WorkExperienceSchema);
 
