@@ -121,6 +121,28 @@ export async function updateSkill(req, res, next) {
 export async function deleteSkill(req, res, next) {
   const { resumeId, id } = req.params;
   try {
+    // check if resume exists
+    const resume = await Resume.findById(resumeId);
+    if (!resume)
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: "Resume doesn't exists",
+      });
+
+    // check if skill for this resume exists, and delete
+    let existingSkill = await Skill.findOneAndDelete({
+      resume: resumeId,
+      _id: id,
+    });
+    if (!existingSkill)
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: "Skill doesn't not exist",
+      });
+
+    // return json response
     res.status(200).json({
       success: true,
       message: "Skill deleted successfully",
