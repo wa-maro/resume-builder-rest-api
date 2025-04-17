@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import resumeRouter from "./routers/resume.router.js";
+import authRouter from "./routers/auth.router.js";
 
 const app = express();
 
@@ -11,6 +12,7 @@ mongoose
   .then(() => console.log("Database connection established"))
   .catch((error) => console.log(error));
 
+app.use("/api/v0/auth", authRouter);
 app.use("/api/v0/resumes", resumeRouter);
 
 app.listen(process.env.PORT, () =>
