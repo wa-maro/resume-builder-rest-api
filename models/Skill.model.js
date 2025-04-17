@@ -16,7 +16,7 @@ const SkillSchema = new mongoose.Schema(
     description: { type: String, trim: true },
     proficiency: {
       type: String,
-      enum: ["beginner", "intermediate", "advanced"],
+      enum: ["beginner", "intermediate", "advanced", "expert"],
     },
     certification: String,
   },
