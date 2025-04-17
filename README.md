@@ -71,3 +71,33 @@ These endpoints allow you to manage the personal detail section of a resume. Eac
 > 🔗 For detailed API documentation, 👉 [personal-detail.md](./docs/personal-detail.md)
 
 ---
+
+#### 🎓 Education Qualification API Endpoints
+
+These endpoints allow you to manage general education qualifications such as Primary, O-Level, and A-Level within a resume's education background.
+
+| Method | Endpoint                                                 | Description                                 |
+| ------ | -------------------------------------------------------- | ------------------------------------------- |
+| POST   | `/api/v0/resumes/:resumeId/education-qualifications/`    | Add a new education qualification           |
+| GET    | `/api/v0/resumes/:resumeId/education-qualifications/`    | Get all education qualifications for resume |
+| PATCH  | `/api/v0/resumes/:resumeId/education-qualifications/:id` | Update a specific education qualification   |
+| DELETE | `/api/v0/resumes/:resumeId/education-qualifications/:id` | Delete a specific education qualification   |
+
+> 🔗 For detailed API documentation, 👉 [education-qualifications.md](./docs/education-qualifications.md)
+
+---
+
+#### 🎓 Profession Qualification API Endpoints
+
+These endpoints allow you to manage higher education qualifications (e.g., Diplomas, Degrees) within a resume's education background.
+
+| Method | Endpoint                                                  | Description                                  |
+| ------ | --------------------------------------------------------- | -------------------------------------------- |
+| POST   | `/api/v0/resumes/:resumeId/profession-qualifications/`    | Add a new profession qualification           |
+| GET    | `/api/v0/resumes/:resumeId/profession-qualifications/`    | Get all profession qualifications for resume |
+| PATCH  | `/api/v0/resumes/:resumeId/profession-qualifications/:id` | Update a specific profession qualification   |
+| DELETE | `/api/v0/resumes/:resumeId/profession-qualifications/:id` | Delete a specific profession qualification   |
+
+> 🔗 For detailed API documentation, 👉 [profession-qualifications.md](./docs/profession-qualifications.md)
+
+---
