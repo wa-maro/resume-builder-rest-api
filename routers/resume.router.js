@@ -9,6 +9,7 @@ import personalDetailRouter from "./personalDetail.router.js";
 import educationQualificationsRouter from "./educationQualifications.router.js";
 import professionQualificationsRouter from "./professionQualifications.router.js";
 import workExperienceRouter from "./workExperience.router.js";
+import skillRouter from "./skill.router.js";
 
 const resumeRouter = Router();
 
@@ -22,6 +23,7 @@ resumeRouter
   .use("/:resumeId/personal-detail", personalDetailRouter)
   .use("/:resumeId/education-qualifications", educationQualificationsRouter)
   .use("/:resumeId/profession-qualifications", professionQualificationsRouter)
-  .use("/:resumeId/work-experiences", workExperienceRouter);
+  .use("/:resumeId/work-experiences", workExperienceRouter)
+  .use("/:resumeId/skills", skillRouter);
 
 export default resumeRouter;
