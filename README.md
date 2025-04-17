@@ -116,3 +116,18 @@ These endpoints allow you to manage the skills section of a resume. Each user ca
 > 🔗 For detailed API documentation, 👉 [skills.md](./docs/skills.md)
 
 ---
+
+### 👥 Referee API Endpoints
+
+These endpoints allow you to manage the referees section of a resume. Each user can add, retrieve, update, or delete multiple referees under their resume.
+
+| Method | Endpoint                                 | Description                     |
+| ------ | ---------------------------------------- | ------------------------------- |
+| POST   | `/api/v0/resumes/:resumeId/referees/`    | Add a new referee               |
+| GET    | `/api/v0/resumes/:resumeId/referees/`    | Get all referees for a resume   |
+| PATCH  | `/api/v0/resumes/:resumeId/referees/:id` | Update a specific referee by ID |
+| DELETE | `/api/v0/resumes/:resumeId/referees/:id` | Delete a specific referee by ID |
+
+> 🔗 For detailed API documentation, 👉 [referees.md](./docs/referees.md)
+
+---

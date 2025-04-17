@@ -95,14 +95,12 @@ Authorization: Bearer {token}
   "message": "Skills retrieved successfully",
   "skills": [
     {
-      "skill": {
-        "_id": "661f4c00c8f62c33b2b3a4f5",
-        "type": "soft",
-        "name": "JavaScript",
-        "proficiency": "Advanced",
-        "createdAt": "2025-04-17T07:41:12.080Z",
-        "updatedAt": "2025-04-17T07:41:12.080Z"
-      }
+      "_id": "661f4c00c8f62c33b2b3a4f5",
+      "type": "soft",
+      "name": "JavaScript",
+      "proficiency": "Advanced",
+      "createdAt": "2025-04-17T07:41:12.080Z",
+      "updatedAt": "2025-04-17T07:41:12.080Z"
     }
   ]
 }
