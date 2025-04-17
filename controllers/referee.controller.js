@@ -118,8 +118,28 @@ export async function updateReferee(req, res, next) {
 // delete existing referee for a specific resume
 export async function deleteReferee(req, res, next) {
   const { resumeId, id } = req.params;
-
   try {
+    // check if resume exists
+    const resume = await Resume.findById(resumeId);
+    if (!resume)
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: "Resume doesn't exists",
+      });
+
+    // check if referee for this resume exists, and delete
+    let existingReferee = await Referee.findOneAndDelete({
+      resume: resumeId,
+      _id: id,
+    });
+    if (!existingReferee)
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: "Referee doesn't not exist",
+      });
+
     // return json response
     res.status(200).json({
       success: true,
