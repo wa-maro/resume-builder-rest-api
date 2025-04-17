@@ -1,0 +1,63 @@
+import Referee from "../models/Referee.model.js";
+import Resume from "../models/Resume.model.js";
+
+// add new referee for a specific resume
+export async function addReferee(req, res, next) {
+  const resumeId = req.params.resumeId;
+  const newReferee = req.body;
+
+  try {
+    // return json response
+    res.status(201).json({
+      success: true,
+      message: "Referee added successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+// get all referees for a specific resume
+export async function getReferees(req, res, next) {
+  const resumeId = req.params.resumeId;
+  try {
+    // return json response
+    res.status(200).json({
+      success: true,
+      message: "Referees retrieved successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+// update existing referee for a specific resume
+export async function updateReferee(req, res, next) {
+  const { resumeId, id } = req.params;
+  const updatedReferee = req.body;
+
+  try {
+    // return json response
+    res.status(200).json({
+      success: true,
+      message: "Referee updated successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+// delete existing referee for a specific resume
+export async function deleteReferee(req, res, next) {
+  const { resumeId, id } = req.params;
+
+  try {
+    // return json response
+    res.status(200).json({
+      success: true,
+      message: "Referee deleted successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+}
