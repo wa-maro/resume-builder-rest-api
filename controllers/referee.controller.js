@@ -51,10 +51,22 @@ export async function addReferee(req, res, next) {
 export async function getReferees(req, res, next) {
   const resumeId = req.params.resumeId;
   try {
+    // check if resume exists
+    const resume = await Resume.findById(resumeId);
+    if (!resume)
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: "Resume doesn't exists",
+      });
+
+    const referees = await Referee.find({ resume: resumeId }).lean();
+
     // return json response
     res.status(200).json({
       success: true,
       message: "Referees retrieved successfully",
+      referees,
     });
   } catch (error) {
     next(error);
