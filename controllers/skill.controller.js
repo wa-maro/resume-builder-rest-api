@@ -51,9 +51,24 @@ export async function addSkill(req, res, next) {
 export async function getSkills(req, res, next) {
   const resumeId = req.params.resumeId;
   try {
+    // check if resume exists
+    const resume = await Resume.findById(resumeId);
+    if (!resume)
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: "Resume doesn't exists",
+      });
+
+    const skills = await Skill.find({
+      resume: resumeId,
+    }).lean();
+
+    // return json response
     res.status(200).json({
       success: true,
       message: "Skills retrieved successfully",
+      skills,
     });
   } catch (error) {
     next(error);
