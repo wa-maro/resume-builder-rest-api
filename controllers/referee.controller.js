@@ -7,10 +7,40 @@ export async function addReferee(req, res, next) {
   const newReferee = req.body;
 
   try {
+    // check if resume exists
+    const resume = await Resume.findById(resumeId);
+    if (!resume)
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: "Resume doesn't exists",
+      });
+
+    // check if referee for this resume already exist
+    let existingReferee = await Referee.findOne({
+      resume: resumeId,
+      $or: [{ email: newReferee.email }, { phone: newReferee.phone }],
+    });
+    if (existingReferee)
+      return res.status(409).json({
+        success: false,
+        error: "Conflict",
+        message:
+          "Referee with this email or phone already exists for this resume",
+      });
+
+    // Create and save the new experience
+    const referee = new Referee({
+      ...newReferee,
+      resume: resumeId,
+    });
+    await referee.save();
+
     // return json response
     res.status(201).json({
       success: true,
       message: "Referee added successfully",
+      referee,
     });
   } catch (error) {
     next(error);

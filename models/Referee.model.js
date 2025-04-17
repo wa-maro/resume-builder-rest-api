@@ -33,6 +33,9 @@ const RefereeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+RefereeSchema.index({ resume: 1, email: 1 }, { unique: true });
+RefereeSchema.index({ resume: 1, phone: 1 }, { unique: true });
+
 const Referee = mongoose.model("Referee", RefereeSchema);
 
 export default Referee;
