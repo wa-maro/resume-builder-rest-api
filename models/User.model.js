@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { doHash } from "../utils/hashing.js";
+import { doHash } from "../utils/hashing.util.js";
 
 // define a User schema
 const UserSChema = new mongoose.Schema({
