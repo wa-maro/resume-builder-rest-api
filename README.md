@@ -101,3 +101,18 @@ These endpoints allow you to manage higher education qualifications (e.g., Diplo
 > 🔗 For detailed API documentation, 👉 [profession-qualifications.md](./docs/profession-qualifications.md)
 
 ---
+
+### 🧠 Skills API Endpoints
+
+These endpoints allow you to manage the skills section of a resume. Each user can add, retrieve, update, or delete multiple skills under their resume.
+
+| Method | Endpoint                               | Description                   |
+| ------ | -------------------------------------- | ----------------------------- |
+| POST   | `/api/v0/resumes/:resumeId/skills/`    | Add a new skill               |
+| GET    | `/api/v0/resumes/:resumeId/skills/`    | Get all skills for a resume   |
+| PATCH  | `/api/v0/resumes/:resumeId/skills/:id` | Update a specific skill by ID |
+| DELETE | `/api/v0/resumes/:resumeId/skills/:id` | Delete a specific skill by ID |
+
+> 🔗 For detailed API documentation, 👉 [skills.md](./docs/skills.md)
+
+---
