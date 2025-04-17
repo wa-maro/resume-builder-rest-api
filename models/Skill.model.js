@@ -12,7 +12,7 @@ const SkillSchema = new mongoose.Schema(
       enum: ["soft", "professional"],
       required: true,
     },
-    name: { type: String, required: true, trim: true },
+    name: { type: String, required: true, unique: true, trim: true },
     description: { type: String, trim: true },
     proficiency: {
       type: String,

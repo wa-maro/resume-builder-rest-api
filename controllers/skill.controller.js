@@ -81,12 +81,39 @@ export async function updateSkill(req, res, next) {
   const updatedSkill = req.body;
 
   try {
+    // check if resume exists
+    const resume = await Resume.findById(resumeId);
+    if (!resume)
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: "Resume doesn't exists",
+      });
+
+    // check if skill for this resume exists, update and return it
+    let existingSkill = await Skill.findOneAndUpdate(
+      {
+        resume: resumeId,
+        _id: id,
+      },
+      { ...updatedSkill },
+      { new: true }
+    );
+    if (!existingSkill)
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: "Skill doesn't not exist",
+      });
+
+    // return json response
     res.status(200).json({
       success: true,
       message: "Skill updated successfully",
+      skill: existingSkill,
     });
   } catch (error) {
-    next({});
+    next(error);
   }
 }
 

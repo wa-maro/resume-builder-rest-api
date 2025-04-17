@@ -92,7 +92,7 @@ export const updateWorkExperience = async (req, res, next) => {
         message: "Resume doesn't exist",
       });
 
-    // check if work experience for this resume exists
+    // check if work experience for this resume exists, update and return it
     const workExperience = await WorkExperience.findOneAndUpdate(
       {
         resume: resumeId,
