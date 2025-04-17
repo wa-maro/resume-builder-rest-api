@@ -79,10 +79,36 @@ export async function updateReferee(req, res, next) {
   const updatedReferee = req.body;
 
   try {
+    // check if resume exists
+    const resume = await Resume.findById(resumeId);
+    if (!resume)
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: "Resume doesn't exists",
+      });
+
+    // check if referee for this resume exists, update and return it
+    let existingReferee = await Referee.findOneAndUpdate(
+      {
+        resume: resumeId,
+        _id: id,
+      },
+      { ...updatedReferee },
+      { new: true }
+    );
+    if (!existingReferee)
+      return res.status(404).json({
+        success: false,
+        error: "Not Found",
+        message: "Referee doesn't not exist",
+      });
+
     // return json response
     res.status(200).json({
       success: true,
       message: "Referee updated successfully",
+      referee: existingReferee,
     });
   } catch (error) {
     next(error);
