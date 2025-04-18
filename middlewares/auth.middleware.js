@@ -1,4 +1,9 @@
 import User from "../models/User.model.js";
+import {
+  BadRequestError,
+  NotFoundError,
+  UnauthorizedError,
+} from "../utils/customErrors.util.js";
 import { verifyToken } from "../utils/jwt.util.js";
 
 const authenticate = async (req, res, next) => {
@@ -7,23 +12,23 @@ const authenticate = async (req, res, next) => {
       ? req.headers.authorization.split(" ")[1]
       : "";
 
-    if (!authToken) throw new Error("Authorization token is required"); // 400 Bad Request
+    if (!authToken)
+      return next(new BadRequestError("Authorization token is required"));
 
     // verify jwt token
     const isVerifiedUser = verifyToken(authToken);
-    if (!isVerifiedUser) throw new Error("Not authorized"); // 401 Unauthorized
+    if (!isVerifiedUser) return next(new UnauthorizedError("Not authorized"));
 
     // check if user exists and attach user to request
     const user = await User.findById(isVerifiedUser.id).lean();
-    if (!user) throw new Error("User doesn't exists"); // 404 Not Found
-
+    if (!user) return next(new NotFoundError("User doesn't exists"));
     req.user = { id: user._id, email: user.email, username: user.username };
 
     next();
   } catch (error) {
-    console.error(`${req.method} ${req.originalUrl}`);
-    console.error("Error Message:", error.message);
-    next(error);
+    next(
+      new UnauthorizedError("Invalid token or missing authorization header")
+    );
   }
 };
 

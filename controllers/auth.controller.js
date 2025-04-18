@@ -1,17 +1,22 @@
 import User from "../models/User.model.js";
+import {
+  BadRequestError,
+  ConflictError,
+  NotFoundError,
+} from "../utils/customErrors.util.js";
 import { compareHash } from "../utils/hashing.util.js";
 import { generateToken } from "../utils/jwt.util.js";
 
-export const register = async (req, res) => {
+export const register = async (req, res, next) => {
   const { username, email, password } = req.body;
 
   // check if user already exist
   const existingUser = await User.findOne({ username, email });
-  if (existingUser) throw new Error("User already exists"); // 409 Conflict
+  if (existingUser) next(new ConflictError("User already exists"));
 
   // create user and save it
   const newUser = await User({ username, email, password });
-  if (!newUser) throw new Error("User not created"); // 400 Bad Request
+  if (!newUser) next(new BadRequestError("User not created"));
 
   const savedUser = await newUser.save();
   savedUser.password = undefined;
@@ -23,18 +28,18 @@ export const register = async (req, res) => {
   });
 };
 
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
   const { username, password } = req.body;
 
   // check if user already exist
   const existingUser = await User.findOne({ username })
     .select("+password")
     .lean();
-  if (!existingUser) throw new Error("User doesn't exists"); // 404 Not Found
+  if (!existingUser) next(new new NotFoundError("User doesn't exists")());
 
   // compare password
   const isMatch = compareHash(password, existingUser.password);
-  if (!isMatch) throw new Error("Wrong credentials"); // 400 Bad Request
+  if (!isMatch) next(new BadRequestError("Wrong credentials"));
   delete existingUser.password;
 
   // generate authentication token

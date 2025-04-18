@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import resumeRouter from "./routers/resume.router.js";
 import authRouter from "./routers/auth.router.js";
 import authenticate from "./middlewares/auth.middleware.js";
+import errorHandler from "./middlewares/errorHandler.middleware.js";
 
 const app = express();
 
@@ -15,6 +16,8 @@ mongoose
 
 app.use("/api/v0/auth", authRouter);
 app.use("/api/v0/resumes", authenticate, resumeRouter);
+
+app.use(errorHandler);
 
 app.listen(process.env.PORT, () =>
   console.log(`Server started at ${process.env.PORT}`)

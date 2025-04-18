@@ -1,14 +1,15 @@
 import Resume from "../models/Resume.model.js";
+import { ConflictError } from "../utils/customErrors.util.js";
 
 // create a new resume: for specific user
-export const createResume = async (req, res) => {
+export const createResume = async (req, res, next) => {
   // check if resume by given user already exist
   const existingResume = await Resume.findOne({ user: req.user.id });
-  if (existingResume) throw new Error("Resume already exists"); // 409 Conflict
+  if (existingResume) next(new ConflictError("Resume already exists"));
 
   // create a resume and save it
   const newResume = new Resume({ user: req.user.id, ...req.body });
-  if (!newResume) throw new Error("Failed to create resume"); // 400 Bad Request
+  if (!newResume) next(new NotFoundError("Failed to create resume"));
   const savedResume = await newResume.save();
 
   // return json response
@@ -20,13 +21,13 @@ export const createResume = async (req, res) => {
 };
 
 // retrieve existing resume by id: for specific user
-export const getResume = async (req, res) => {
+export const getResume = async (req, res, next) => {
   // get a resume by given user and return it
   const existingResume = await Resume.findOne({
     user: req.user.id,
     _id: req.params.id,
   });
-  if (!existingResume) throw new Error("Resume doesn't exists"); // 404 Not Found
+  if (!existingResume) next(new NotFoundError("Resume doesn't exists"));
 
   // return json response
   res.status(200).json({
@@ -37,7 +38,7 @@ export const getResume = async (req, res) => {
 };
 
 // updated existing resume by id: for specific user
-export const updateResume = async (req, res) => {
+export const updateResume = async (req, res, next) => {
   // get a resume by given user and update it
   const updatedResume = await Resume.findOneAndUpdate(
     {
@@ -47,7 +48,7 @@ export const updateResume = async (req, res) => {
     { ...req.body },
     { new: true }
   );
-  if (!updatedResume) throw new Error("Resume doesn't exists"); // 404 Not Found
+  if (!updatedResume) next(new NotFoundError("Resume doesn't exists"));
 
   // return json response
   res.status(200).json({
@@ -58,16 +59,16 @@ export const updateResume = async (req, res) => {
 };
 
 // delete existing resume by id: for specific user
-export const deleteResume = async (req, res) => {
+export const deleteResume = async (req, res, next) => {
   // get a resume by given user and return it
   const deletedResume = await Resume.findOneAndDelete({
     user: req.user.id,
     _id: req.params.id,
   });
-  if (!deletedResume) throw new Error("Resume doesn't exists"); // 404 Not Found
+  if (!deletedResume) next(new NotFoundError("Resume doesn't exists"));
 
   // return json response
-  res.status(200).json({
+  res.status(204).json({
     success: true,
     message: "Resume deleted successfully",
   });

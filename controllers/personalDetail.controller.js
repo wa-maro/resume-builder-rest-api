@@ -1,24 +1,31 @@
 import PersonalDetail from "../models/personalDetail.model.js";
 import Resume from "../models/Resume.model.js";
+import {
+  BadRequestError,
+  ConflictError,
+  NotFoundError,
+} from "../utils/customErrors.util.js";
 
 // add new personal detail to a resume
-export const addPersonalDetail = async (req, res) => {
+export const addPersonalDetail = async (req, res, next) => {
   // check if the resume exists and return it
   const resume = await Resume.findById(req.params.resumeId);
-  if (!resume) throw new Error("Resume doesn't exists"); // 404 Not Found
+  if (!resume) next(new NotFoundError("Resume doesn't exists"));
 
   // check if personal detail already exist for given resume
   const existingPersonalDetail = await PersonalDetail.findOne({
     resume: resume._id,
   });
-  if (existingPersonalDetail) throw new Error("Personal Detail already exists"); // 409 Conflict
+  if (existingPersonalDetail)
+    next(new ConflictError("Personal Detail already exists"));
 
   // add personal detail and save it
   const newPersonalDetail = new PersonalDetail({
     resume: resume._id,
     ...req.body,
   });
-  if (!newPersonalDetail) throw new Error("Failed to add personal detail"); // 400 Bad Request
+  if (!newPersonalDetail)
+    next(new BadRequestError("Failed to add personal detail"));
   const savedPersonalDetail = await newPersonalDetail.save();
 
   // return json response
@@ -30,10 +37,10 @@ export const addPersonalDetail = async (req, res) => {
 };
 
 // add new personal detail to a resume
-export const getPersonalDetail = async (req, res) => {
+export const getPersonalDetail = async (req, res, next) => {
   // check if the resume exists and return it
   const resume = await Resume.findById(req.params.resumeId);
-  if (!resume) throw new Error("Resume doesn't exists"); // 404 Not Found
+  if (!resume) next(new NotFoundError("Resume doesn't exists"));
 
   // find existing personal detail and return it
   const existingPersonalDetail = await PersonalDetail.findOne({
@@ -41,7 +48,7 @@ export const getPersonalDetail = async (req, res) => {
     _id: req.params.id,
   });
   if (!existingPersonalDetail)
-    throw new Error("Personal Detail doesn't exists"); // 404 Not Found
+    next(new NotFoundError("Personal Detail doesn't exists"));
 
   // return json response
   res.status(200).json({
@@ -52,10 +59,10 @@ export const getPersonalDetail = async (req, res) => {
 };
 
 // add new personal detail to a resume
-export const updatePersonalDetail = async (req, res) => {
+export const updatePersonalDetail = async (req, res, next) => {
   // check if the resume exists and return it
   const resume = await Resume.findById(req.params.resumeId);
-  if (!resume) throw new Error("Resume doesn't exists"); // 404 Not Found
+  if (!resume) next(new NotFoundError("Resume doesn't exists"));
 
   // find existing personal detail and update it
   const updatedPersonalDetail = await PersonalDetail.findOneAndUpdate(
@@ -63,7 +70,8 @@ export const updatePersonalDetail = async (req, res) => {
     { ...req.body },
     { new: true }
   );
-  if (!updatedPersonalDetail) throw new Error("Personal Detail doesn't exists"); // 404 Not Found
+  if (!updatedPersonalDetail)
+    next(new NotFoundError("Personal Detail doesn't exists"));
 
   // return json response
   res.status(200).json({
