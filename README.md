@@ -43,6 +43,19 @@ npm install
 
 ---
 
+### 🔐 User Authentication API Endpoints
+
+These endpoints handle user registration, login, logout, and password management. Each user must register and authenticate to access protected features such as managing resumes and their sections.
+
+| Method | Endpoint                | Description                    |
+| ------ | ----------------------- | ------------------------------ |
+| POST   | `/api/v0/auth/register` | Register a new user            |
+| POST   | `/api/v0/auth/login`    | Log in and receive a JWT token |
+
+> 🔗 For detailed API documentation, 👉 [auth.md](./docs/auth.md)
+
+---
+
 ### 📄 Resume API Endpoints
 
 These endpoints allow you to manage the resume itself, which acts as the central entity linking together all sections like personal details, education, work experience, skills, referees, and more. Each user can have one resume.
