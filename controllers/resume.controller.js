@@ -5,11 +5,11 @@ import { ConflictError } from "../utils/customErrors.util.js";
 export const createResume = async (req, res, next) => {
   // check if resume by given user already exist
   const existingResume = await Resume.findOne({ user: req.user.id });
-  if (existingResume) next(new ConflictError("Resume already exists"));
+  if (existingResume) return next(new ConflictError("Resume already exists"));
 
   // create a resume and save it
   const newResume = new Resume({ user: req.user.id, ...req.body });
-  if (!newResume) next(new NotFoundError("Failed to create resume"));
+  if (!newResume) return next(new NotFoundError("Failed to create resume"));
   const savedResume = await newResume.save();
 
   // return json response
@@ -27,7 +27,7 @@ export const getResume = async (req, res, next) => {
     user: req.user.id,
     _id: req.params.id,
   });
-  if (!existingResume) next(new NotFoundError("Resume doesn't exists"));
+  if (!existingResume) return next(new NotFoundError("Resume doesn't exists"));
 
   // return json response
   res.status(200).json({
@@ -48,7 +48,7 @@ export const updateResume = async (req, res, next) => {
     { ...req.body },
     { new: true }
   );
-  if (!updatedResume) next(new NotFoundError("Resume doesn't exists"));
+  if (!updatedResume) return next(new NotFoundError("Resume doesn't exists"));
 
   // return json response
   res.status(200).json({
@@ -65,7 +65,7 @@ export const deleteResume = async (req, res, next) => {
     user: req.user.id,
     _id: req.params.id,
   });
-  if (!deletedResume) next(new NotFoundError("Resume doesn't exists"));
+  if (!deletedResume) return next(new NotFoundError("Resume doesn't exists"));
 
   // return json response
   res.status(204).json({

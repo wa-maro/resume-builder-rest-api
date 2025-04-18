@@ -9,14 +9,14 @@ export const addProfessionQualification = async (req, res, next) => {
 
   // Check if resume exists
   const resume = await Resume.findById(resumeId);
-  if (!resume) next(new NotFoundError("Resume doesn't exists"));
+  if (!resume) return next(new NotFoundError("Resume doesn't exists"));
 
   // Find the education background for this resume
   const educationBackground = await EducationBackground.findOne({
     resume: resumeId,
   });
   if (!educationBackground)
-    next(new NotFoundError("Education Background doesn't exists"));
+    return next(new NotFoundError("Education Background doesn't exists"));
 
   // Ensure qualifications are an array
   newQualifications = Array.isArray(newQualifications)
@@ -64,14 +64,14 @@ export const getProfessionQualifications = async (req, res, next) => {
 
   // Check if resume exists
   const resume = await Resume.findById(resumeId);
-  if (!resume) next(new NotFoundError("Resume doesn't exists"));
+  if (!resume) return next(new NotFoundError("Resume doesn't exists"));
 
   // Find the education background for this resume
   const educationBackground = await EducationBackground.findOne({
     resume: resumeId,
   });
   if (!educationBackground)
-    next(new NotFoundError("Education Background doesn't exists"));
+    return next(new NotFoundError("Education Background doesn't exists"));
 
   // Return json response
   res.status(200).json({
@@ -89,18 +89,19 @@ export const updateProfessionQualification = async (req, res, next) => {
 
   // Check if resume exists
   const resume = await Resume.findById(resumeId);
-  if (!resume) next(new NotFoundError("Resume doesn't exists"));
+  if (!resume) return next(new NotFoundError("Resume doesn't exists"));
 
   // Find the education background for this resume
   const educationBackground = await EducationBackground.findOne({
     resume: resumeId,
   });
   if (!educationBackground)
-    next(new NotFoundError("Education Background doesn't exists"));
+    return next(new NotFoundError("Education Background doesn't exists"));
 
   // Find the qualification by ID
   const qualification = educationBackground.professionQualifications.id(id);
-  if (!qualification) next(new NotFoundError("Qualification doesn't exists"));
+  if (!qualification)
+    return next(new NotFoundError("Qualification doesn't exists"));
 
   // Update fields and save
   Object.assign(qualification, updatedQualification);
@@ -120,18 +121,19 @@ export const deleteProfessionQualification = async (req, res, next) => {
 
   // Check if resume exists
   const resume = await Resume.findById(resumeId);
-  if (!resume) next(new NotFoundError("Resume doesn't exists"));
+  if (!resume) return next(new NotFoundError("Resume doesn't exists"));
 
   // Find the education background for this resume
   const educationBackground = await EducationBackground.findOne({
     resume: resumeId,
   });
   if (!educationBackground)
-    next(new NotFoundError("Education Background doesn't exists"));
+    return next(new NotFoundError("Education Background doesn't exists"));
 
   // Find the specific qualification
   const qualification = educationBackground.professionQualifications.id(id);
-  if (!qualification) next(new NotFoundError("Qualification doesn't exists"));
+  if (!qualification)
+    return next(new NotFoundError("Qualification doesn't exists"));
 
   // Remove qualification and save
   educationBackground.professionQualifications.remove(id);

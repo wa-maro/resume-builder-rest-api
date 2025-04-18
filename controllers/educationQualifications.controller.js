@@ -9,7 +9,7 @@ export const addEducationQualifications = async (req, res, next) => {
 
   // check if resume exists
   const resume = await Resume.findById(resumeId);
-  if (!resume) next(new NotFoundError("Resume doesn't exists"));
+  if (!resume) return next(new NotFoundError("Resume doesn't exists"));
 
   // check if education background exists for given resume
   let educationBackground = await EducationBackground.findOne({
@@ -59,7 +59,7 @@ export const getEducationQualifications = async (req, res, next) => {
 
   // Check if the resume exists
   const resume = await Resume.findById(resumeId);
-  if (!resume) next(new NotFoundError("Resume doesn't exists"));
+  if (!resume) return next(new NotFoundError("Resume doesn't exists"));
 
   // get education background by resume id and return it
   const educationBackground = await EducationBackground.findOne({
@@ -81,21 +81,22 @@ export const updateEducationQualification = async (req, res, next) => {
 
   // Check if resume exists
   const resume = await Resume.findById(resumeId);
-  if (!resume) next(new NotFoundError("Resume doesn't exists"));
+  if (!resume) return next(new NotFoundError("Resume doesn't exists"));
 
   // Find the education background for this resume
   const educationBackground = await EducationBackground.findOne({
     resume: resumeId,
   });
   if (!educationBackground)
-    next(new NotFoundError("Education Background doesn't exists"));
+    return next(new NotFoundError("Education Background doesn't exists"));
 
   // Find the index of the qualification to update
   const index = educationBackground.educationQualifications.findIndex(
     (qualification) => qualification._id.equals(id)
   );
 
-  if (index === -1) next(new NotFoundError("Qualification doesn't exists"));
+  if (index === -1)
+    return next(new NotFoundError("Qualification doesn't exists"));
 
   // Preserve the original _id and update the qualification
   educationBackground.educationQualifications[index] = {
@@ -121,14 +122,14 @@ export const deleteEducationQualification = async (req, res, next) => {
 
   // Check if resume exists
   const resume = await Resume.findById(resumeId);
-  if (!resume) next(new NotFoundError("Resume doesn't exists"));
+  if (!resume) return next(new NotFoundError("Resume doesn't exists"));
 
   // Find the education background for this resume
   const educationBackground = await EducationBackground.findOne({
     resume: resumeId,
   });
   if (!educationBackground)
-    next(new NotFoundError("Education Background doesn't exists"));
+    return next(new NotFoundError("Education Background doesn't exists"));
 
   // Filter out the qualification by id and save
   const originalLength = educationBackground.educationQualifications.length;
@@ -138,7 +139,7 @@ export const deleteEducationQualification = async (req, res, next) => {
     );
 
   if (educationBackground.educationQualifications.length === originalLength)
-    next(new NotFoundError("Qualification doesn't exists"));
+    return next(new NotFoundError("Qualification doesn't exists"));
 
   await educationBackground.save();
 

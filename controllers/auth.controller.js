@@ -12,11 +12,11 @@ export const register = async (req, res, next) => {
 
   // check if user already exist
   const existingUser = await User.findOne({ username, email });
-  if (existingUser) next(new ConflictError("User already exists"));
+  if (existingUser) return next(new ConflictError("User already exists"));
 
   // create user and save it
   const newUser = await User({ username, email, password });
-  if (!newUser) next(new BadRequestError("User not created"));
+  if (!newUser) return next(new BadRequestError("User not created"));
 
   const savedUser = await newUser.save();
   savedUser.password = undefined;
@@ -35,11 +35,12 @@ export const login = async (req, res, next) => {
   const existingUser = await User.findOne({ username })
     .select("+password")
     .lean();
-  if (!existingUser) next(new new NotFoundError("User doesn't exists")());
+  if (!existingUser)
+    return next(new new NotFoundError("User doesn't exists")());
 
   // compare password
   const isMatch = compareHash(password, existingUser.password);
-  if (!isMatch) next(new BadRequestError("Wrong credentials"));
+  if (!isMatch) return next(new BadRequestError("Wrong credentials"));
   delete existingUser.password;
 
   // generate authentication token
