@@ -1,5 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
+import helmet from "helmet";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 import resumeRouter from "./routers/resume.router.js";
 import authRouter from "./routers/auth.router.js";
 import authenticate from "./middlewares/auth.middleware.js";
@@ -13,7 +16,10 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(helmet()); // Set the security headers
+app.use(cors()); // Enable CORS before anything that needs to send headers
 app.use(express.json());
+app.use(cookieParser()); // Parse cookies before you use them (e.g., in auth middleware)
 
 mongoose
   .connect(process.env.MONGO_URI)
