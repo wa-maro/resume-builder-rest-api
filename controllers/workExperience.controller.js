@@ -3,13 +3,13 @@ import Resume from "../models/Resume.model.js";
 import { ConflictError } from "../utils/customErrors.util.js";
 
 // add a new work experience for a specific resume
-export const addWorkExperience = async (req, res, next) => {
+export const addWorkExperience = async (req, res,) => {
   const { resumeId } = req.params;
   const newExperience = req.body;
 
   // Check if resume exists
   const resume = await Resume.findById(resumeId);
-  if (!resume) return next(new NotFoundError("Resume doesn't exists"));
+  if (!resume) throw new NotFoundError("Resume doesn't exists");
 
   // check if work experience for this resume already exist
   const existingExperience = await WorkExperience.findOne({
@@ -19,7 +19,7 @@ export const addWorkExperience = async (req, res, next) => {
     startDate: newExperience.startDate,
   });
   if (existingExperience)
-    return next(new ConflictError("Work experience already exists"));
+    throw new ConflictError("Work experience already exists");
 
   // Create and save the new experience
   const experience = new WorkExperience({
@@ -37,12 +37,12 @@ export const addWorkExperience = async (req, res, next) => {
 };
 
 // get work experiences for a specific resume
-export const getWorkExperiences = async (req, res, next) => {
+export const getWorkExperiences = async (req, res,) => {
   const { resumeId } = req.params;
 
   // Check if resume exists
   const resume = await Resume.findById(resumeId);
-  if (!resume) return next(new NotFoundError("Resume doesn't exists"));
+  if (!resume) throw new NotFoundError("Resume doesn't exists");
 
   const workExperiences = await WorkExperience.find({
     resume: resumeId,
@@ -57,13 +57,13 @@ export const getWorkExperiences = async (req, res, next) => {
 };
 
 // update work experience for a specific resume
-export const updateWorkExperience = async (req, res, next) => {
+export const updateWorkExperience = async (req, res,) => {
   const { resumeId, id } = req.params;
   const updatedExperience = req.body;
 
   // Check if resume exists
   const resume = await Resume.findById(resumeId);
-  if (!resume) return next(new NotFoundError("Resume doesn't exists"));
+  if (!resume) throw new NotFoundError("Resume doesn't exists");
 
   // check if work experience for this resume exists, update and return it
   const workExperience = await WorkExperience.findOneAndUpdate(
@@ -75,7 +75,7 @@ export const updateWorkExperience = async (req, res, next) => {
     { new: true }
   );
   if (!workExperience)
-    return next(new NotFoundError("Work experience doesn't exists"));
+    throw new NotFoundError("Work experience doesn't exists");
 
   // return json response
   res.status(200).json({
@@ -86,12 +86,12 @@ export const updateWorkExperience = async (req, res, next) => {
 };
 
 // delete work experience for a specific resume
-export const deleteWorkExperience = async (req, res, next) => {
+export const deleteWorkExperience = async (req, res,) => {
   const { resumeId, id } = req.params;
 
   // Check if resume exists
   const resume = await Resume.findById(resumeId);
-  if (!resume) return next(new NotFoundError("Resume doesn't exists"));
+  if (!resume) throw new NotFoundError("Resume doesn't exists");
 
   // check if work experience for this resume exists
   const workExperience = await WorkExperience.findOneAndDelete({
@@ -99,7 +99,7 @@ export const deleteWorkExperience = async (req, res, next) => {
     _id: id,
   });
   if (!workExperience)
-    return next(new NotFoundError("Work experience doesn't exists"));
+    throw new NotFoundError("Work experience doesn't exists");
 
   // return json response
   res.status(204).json({

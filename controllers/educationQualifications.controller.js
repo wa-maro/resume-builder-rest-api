@@ -3,13 +3,13 @@ import Resume from "../models/Resume.model.js";
 import { NotFoundError } from "../utils/customErrors.util.js";
 
 // add new education qualifications for a specific resume
-export const addEducationQualifications = async (req, res, next) => {
+export const addEducationQualifications = async (req, res,) => {
   const newQualifications = req.body.educationQualifications;
   const resumeId = req.params.resumeId;
 
   // check if resume exists
   const resume = await Resume.findById(resumeId);
-  if (!resume) return next(new NotFoundError("Resume doesn't exists"));
+  if (!resume) throw new NotFoundError("Resume doesn't exists");
 
   // check if education background exists for given resume
   let educationBackground = await EducationBackground.findOne({
@@ -54,12 +54,12 @@ export const addEducationQualifications = async (req, res, next) => {
 };
 
 // get education qualifications for a specific resume
-export const getEducationQualifications = async (req, res, next) => {
+export const getEducationQualifications = async (req, res,) => {
   const resumeId = req.params.resumeId;
 
   // Check if the resume exists
   const resume = await Resume.findById(resumeId);
-  if (!resume) return next(new NotFoundError("Resume doesn't exists"));
+  if (!resume) throw new NotFoundError("Resume doesn't exists");
 
   // get education background by resume id and return it
   const educationBackground = await EducationBackground.findOne({
@@ -75,28 +75,27 @@ export const getEducationQualifications = async (req, res, next) => {
 };
 
 // update education qualification for a specific resume
-export const updateEducationQualification = async (req, res, next) => {
+export const updateEducationQualification = async (req, res,) => {
   const { resumeId, id } = req.params;
   const updatedQualification = req.body;
 
   // Check if resume exists
   const resume = await Resume.findById(resumeId);
-  if (!resume) return next(new NotFoundError("Resume doesn't exists"));
+  if (!resume) throw new NotFoundError("Resume doesn't exists");
 
   // Find the education background for this resume
   const educationBackground = await EducationBackground.findOne({
     resume: resumeId,
   });
   if (!educationBackground)
-    return next(new NotFoundError("Education Background doesn't exists"));
+    throw new NotFoundError("Education Background doesn't exists");
 
   // Find the index of the qualification to update
   const index = educationBackground.educationQualifications.findIndex(
     (qualification) => qualification._id.equals(id)
   );
 
-  if (index === -1)
-    return next(new NotFoundError("Qualification doesn't exists"));
+  if (index === -1) throw new NotFoundError("Qualification doesn't exists");
 
   // Preserve the original _id and update the qualification
   educationBackground.educationQualifications[index] = {
@@ -117,19 +116,19 @@ export const updateEducationQualification = async (req, res, next) => {
 };
 
 // add education qualification for a specific resume
-export const deleteEducationQualification = async (req, res, next) => {
+export const deleteEducationQualification = async (req, res,) => {
   const { resumeId, id } = req.params;
 
   // Check if resume exists
   const resume = await Resume.findById(resumeId);
-  if (!resume) return next(new NotFoundError("Resume doesn't exists"));
+  if (!resume) throw new NotFoundError("Resume doesn't exists");
 
   // Find the education background for this resume
   const educationBackground = await EducationBackground.findOne({
     resume: resumeId,
   });
   if (!educationBackground)
-    return next(new NotFoundError("Education Background doesn't exists"));
+    throw new NotFoundError("Education Background doesn't exists");
 
   // Filter out the qualification by id and save
   const originalLength = educationBackground.educationQualifications.length;
@@ -139,7 +138,7 @@ export const deleteEducationQualification = async (req, res, next) => {
     );
 
   if (educationBackground.educationQualifications.length === originalLength)
-    return next(new NotFoundError("Qualification doesn't exists"));
+    throw new NotFoundError("Qualification doesn't exists");
 
   await educationBackground.save();
 

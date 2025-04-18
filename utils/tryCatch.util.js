@@ -4,8 +4,7 @@ const tryCatch =
     try {
       await controllerFunc(req, res, next);
     } catch (error) {
-      console.error(`[${controllerName}] ${req.method} ${req.originalUrl}`);
-      console.error("Error Message:", error.message);
+      error.message = `[${controllerName}] ${error.message}`;
       next(error);
     }
   };

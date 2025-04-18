@@ -4,8 +4,14 @@ import resumeRouter from "./routers/resume.router.js";
 import authRouter from "./routers/auth.router.js";
 import authenticate from "./middlewares/auth.middleware.js";
 import errorHandler from "./middlewares/errorHandler.middleware.js";
+import { infoLogger } from "./utils/errorLoggers.util.js";
 
 const app = express();
+
+app.use((req, res, next) => {
+  infoLogger.info(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  next();
+});
 
 app.use(express.json());
 
