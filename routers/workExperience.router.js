@@ -5,13 +5,14 @@ import {
   getWorkExperiences,
   updateWorkExperience,
 } from "../controllers/workExperience.controller.js";
+import tryCatch from "../utils/tryCatch.util.js";
 
 const workExperienceRouter = Router({ mergeParams: true });
 
 workExperienceRouter
-  .post("/", addWorkExperience)
-  .get("/", getWorkExperiences)
-  .patch("/:id", updateWorkExperience)
-  .delete("/:id", deleteWorkExperience);
+  .post("/", tryCatch(addWorkExperience, "addWorkExperience"))
+  .get("/", tryCatch(getWorkExperiences, "getWorkExperiences"))
+  .patch("/:id", tryCatch(updateWorkExperience, "updateWorkExperience"))
+  .delete("/:id", tryCatch(deleteWorkExperience, "deleteWorkExperience"));
 
 export default workExperienceRouter;

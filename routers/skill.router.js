@@ -5,13 +5,14 @@ import {
   getSkills,
   updateSkill,
 } from "../controllers/skill.controller.js";
+import tryCatch from "../utils/tryCatch.util.js";
 
 const skillRouter = Router({ mergeParams: true });
 
 skillRouter
-  .post("/", addSkill)
-  .get("/", getSkills)
-  .patch("/:id", updateSkill)
-  .delete("/:id", deleteSkill);
+  .post("/", tryCatch(addSkill, "addSkill"))
+  .get("/", tryCatch(getSkills, "getSkills"))
+  .patch("/:id", tryCatch(updateSkill, "updateSkill"))
+  .delete("/:id", tryCatch(deleteSkill, "deleteSkill"));
 
 export default skillRouter;

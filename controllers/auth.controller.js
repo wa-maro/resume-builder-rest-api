@@ -2,75 +2,48 @@ import User from "../models/User.model.js";
 import { compareHash } from "../utils/hashing.util.js";
 import { generateToken } from "../utils/jwt.util.js";
 
-export const register = async (req, res, next) => {
+export const register = async (req, res) => {
   const { username, email, password } = req.body;
 
-  try {
-    // check if user already exist
-    const existingUser = await User.findOne({ username, email });
-    if (existingUser)
-      return res.status(409).json({
-        success: false,
-        error: "Conflict",
-        message: "User already exists",
-      });
+  // check if user already exist
+  const existingUser = await User.findOne({ username, email });
+  if (existingUser) throw new Error("User already exists"); // 409 Conflict
 
-    // create user and save it
-    const newUser = await User({ username, email, password });
-    if (!newUser)
-      return res.status(409).json({
-        success: false,
-        error: "Bad Request",
-        message: "User not created",
-      });
-    const savedUser = await newUser.save();
-    savedUser.password = undefined;
+  // create user and save it
+  const newUser = await User({ username, email, password });
+  if (!newUser) throw new Error("User not created"); // 400 Bad Request
 
-    // return json response
-    res.status(201).json({
-      success: true,
-      message: "User registered successfully",
-    });
-  } catch (error) {
-    next(error);
-  }
+  const savedUser = await newUser.save();
+  savedUser.password = undefined;
+
+  // return json response
+  res.status(201).json({
+    success: true,
+    message: "User registered successfully",
+  });
 };
 
-export const login = async (req, res, next) => {
+export const login = async (req, res) => {
   const { username, password } = req.body;
 
-  try {
-    // check if user already exist
-    const existingUser = await User.findOne({ username })
-      .select("+password")
-      .lean();
-    if (!existingUser)
-      return res.status(404).json({
-        success: false,
-        error: "Not Found",
-        message: "User doesn't exists",
-      });
+  // check if user already exist
+  const existingUser = await User.findOne({ username })
+    .select("+password")
+    .lean();
+  if (!existingUser) throw new Error("User doesn't exists"); // 404 Not Found
 
-    // compare password
-    const isMatch = compareHash(password, existingUser.password);
-    if (!isMatch)
-      return res.status(400).json({
-        success: false,
-        error: "Bad Request",
-        message: "Wrong credentials",
-      });
-    delete existingUser.password;
+  // compare password
+  const isMatch = compareHash(password, existingUser.password);
+  if (!isMatch) throw new Error("Wrong credentials"); // 400 Bad Request
+  delete existingUser.password;
 
-    // generate authentication token
-    const token = generateToken(existingUser);
+  // generate authentication token
+  const token = generateToken(existingUser);
 
-    // return json response
-    res.status(200).json({
-      success: true,
-      message: "User logged in successfully",
-      token,
-    });
-  } catch (error) {
-    next(error);
-  }
+  // return json response
+  res.status(200).json({
+    success: true,
+    message: "User logged in successfully",
+    token,
+  });
 };

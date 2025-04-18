@@ -11,14 +11,15 @@ import professionQualificationsRouter from "./professionQualifications.router.js
 import workExperienceRouter from "./workExperience.router.js";
 import skillRouter from "./skill.router.js";
 import refereeRouter from "./referee.router.js";
+import tryCatch from "../utils/tryCatch.util.js";
 
 const resumeRouter = Router();
 
 resumeRouter
-  .post("/", createResume)
-  .get("/:id", getResume)
-  .patch("/:id", updateResume)
-  .delete("/:id", deleteResume);
+  .post("/", tryCatch(createResume, "createResume"))
+  .get("/:id", tryCatch(getResume, "getResume"))
+  .patch("/:id", tryCatch(updateResume, "updateResume"))
+  .delete("/:id", tryCatch(deleteResume, "ddeleteResume"));
 
 resumeRouter
   .use("/:resumeId/personal-detail", personalDetailRouter)
