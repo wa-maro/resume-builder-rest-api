@@ -1,11 +1,18 @@
 import WorkExperience from "../models/WorkExperience.model.js";
 import Resume from "../models/Resume.model.js";
-import { ConflictError } from "../utils/customErrors.util.js";
+import { ConflictError, NotFoundError } from "../utils/customErrors.util.js";
+import {
+  addWorkExperienceBodySchema,
+  updateWorkExperienceBodySchema,
+} from "../utils/validators.util.js";
 
 // add a new work experience for a specific resume
-export const addWorkExperience = async (req, res,) => {
+export const addWorkExperience = async (req, res) => {
+  // validate and sanitize request
+  const { error, value } = addWorkExperienceBodySchema.validate(req.body);
+  if (error) throw new Error(error.details[0].message);
+
   const { resumeId } = req.params;
-  const newExperience = req.body;
 
   // Check if resume exists
   const resume = await Resume.findById(resumeId);
@@ -14,16 +21,16 @@ export const addWorkExperience = async (req, res,) => {
   // check if work experience for this resume already exist
   const existingExperience = await WorkExperience.findOne({
     resume: resumeId,
-    company: newExperience.company,
-    position: newExperience.position,
-    startDate: newExperience.startDate,
+    company: value.company,
+    position: value.position,
+    startDate: value.startDate,
   });
   if (existingExperience)
     throw new ConflictError("Work experience already exists");
 
   // Create and save the new experience
   const experience = new WorkExperience({
-    ...newExperience,
+    ...value,
     resume: resumeId,
   });
   await experience.save();
@@ -37,7 +44,7 @@ export const addWorkExperience = async (req, res,) => {
 };
 
 // get work experiences for a specific resume
-export const getWorkExperiences = async (req, res,) => {
+export const getWorkExperiences = async (req, res) => {
   const { resumeId } = req.params;
 
   // Check if resume exists
@@ -57,9 +64,12 @@ export const getWorkExperiences = async (req, res,) => {
 };
 
 // update work experience for a specific resume
-export const updateWorkExperience = async (req, res,) => {
+export const updateWorkExperience = async (req, res) => {
+  // validate and sanitize request
+  const { error, value } = updateWorkExperienceBodySchema.validate(req.body);
+  if (error) throw new Error(error.details[0].message);
+
   const { resumeId, id } = req.params;
-  const updatedExperience = req.body;
 
   // Check if resume exists
   const resume = await Resume.findById(resumeId);
@@ -71,7 +81,7 @@ export const updateWorkExperience = async (req, res,) => {
       resume: resumeId,
       _id: id,
     },
-    { ...updatedExperience },
+    { ...value },
     { new: true }
   );
   if (!workExperience)
@@ -86,7 +96,7 @@ export const updateWorkExperience = async (req, res,) => {
 };
 
 // delete work experience for a specific resume
-export const deleteWorkExperience = async (req, res,) => {
+export const deleteWorkExperience = async (req, res) => {
   const { resumeId, id } = req.params;
 
   // Check if resume exists

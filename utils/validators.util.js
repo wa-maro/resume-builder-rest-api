@@ -234,3 +234,100 @@ export const updateSkillBodySchema = Joi.object({
     "string.base": "Certification must be a text.",
   }),
 });
+
+export const addWorkExperienceBodySchema = Joi.object({
+  company: Joi.string().required().trim().messages({
+    "string.base": "Company name must be a text.",
+    "string.empty": "Company name is required.",
+    "any.required": "Company name is required.",
+  }),
+  position: Joi.string().required().trim().messages({
+    "string.base": "Position must be a text.",
+    "string.empty": "Position is required.",
+    "any.required": "Position is required.",
+  }),
+  responsibilities: Joi.string().required().trim().min(80).messages({
+    "string.base": "Responsibilities must be a text.",
+    "string.empty": "Responsibilities are required.",
+    "string.min": "Responsibilities must be at least 80 characters long.",
+    "any.required": "Responsibilities are required.",
+  }),
+  startDate: Joi.string()
+    .required()
+    .trim()
+    .pattern(/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s\d{4}$/)
+    .messages({
+      "string.base": "Start date must be a text.",
+      "string.empty": "Start date is required.",
+      "any.required": "Start date is required.",
+      "string.pattern.base":
+        'Start date must be in "MMM YYYY" format (e.g., Jan 2023).',
+    }),
+  currentlyWorking: Joi.boolean().default(false).messages({
+    "boolean.base": "Currently working must be true or false.",
+  }),
+  endDate: Joi.alternatives().conditional("currentlyWorking", {
+    is: false,
+    then: Joi.string()
+      .required()
+      .trim()
+      .pattern(/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s\d{4}$/)
+      .messages({
+        "string.base": "End date must be a text.",
+        "string.empty": "End date is required if not currently working.",
+        "string.pattern.base":
+          'End date must be in "MMM YYYY" format (e.g., Jan 2023).',
+        "any.required": "End date is required if not currently working.",
+      }),
+    otherwise: Joi.string().optional().allow("").messages({
+      "string.base": "End date must be a text.",
+    }),
+  }),
+});
+
+export const updateWorkExperienceBodySchema = Joi.object({
+  company: Joi.string().optional().trim().messages({
+    "string.base": "Company name must be a text.",
+  }),
+
+  position: Joi.string().optional().trim().messages({
+    "string.base": "Position must be a text.",
+  }),
+
+  responsibilities: Joi.string().optional().trim().min(80).messages({
+    "string.base": "Responsibilities must be a text.",
+    "string.min": "Responsibilities must be at least 80 characters long.",
+  }),
+
+  startDate: Joi.string()
+    .optional()
+    .trim()
+    .pattern(/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s\d{4}$/)
+    .messages({
+      "string.base": "Start date must be a text.",
+      "string.pattern.base":
+        'Start date must be in "MMM YYYY" format (e.g., Jan 2023).',
+    }),
+
+  currentlyWorking: Joi.boolean().optional().messages({
+    "boolean.base": "Currently working must be true or false.",
+  }),
+
+  endDate: Joi.alternatives().conditional("currentlyWorking", {
+    is: false,
+    then: Joi.string()
+      .required()
+      .trim()
+      .pattern(/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s\d{4}$/)
+      .messages({
+        "string.base": "End date must be a text.",
+        "string.empty": "End date is required if not currently working.",
+        "any.required": "End date is required if not currently working.",
+        "string.pattern.base":
+          'End date must be in "MMM YYYY" format (e.g., Jan 2023).',
+      }),
+    otherwise: Joi.string().optional().allow("").trim().messages({
+      "string.base": "End date must be a text.",
+    }),
+  }),
+});
