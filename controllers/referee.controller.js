@@ -1,11 +1,18 @@
 import Referee from "../models/Referee.model.js";
 import Resume from "../models/Resume.model.js";
 import { ConflictError, NotFoundError } from "../utils/customErrors.util.js";
+import {
+  addRefereeBodySchema,
+  updateRefereeBodySchema,
+} from "../utils/validators.util.js";
 
 // add new referee for a specific resume
 export async function addReferee(req, res) {
+  // validate and sanitize request
+  const { error, value } = addRefereeBodySchema.validate(req.body);
+  if (error) throw new Error(error.details[0].message);
+
   const resumeId = req.params.resumeId;
-  const newReferee = req.body;
 
   // check if resume exists
   const resume = await Resume.findById(resumeId);
@@ -14,13 +21,13 @@ export async function addReferee(req, res) {
   // check if referee for this resume already exist
   let existingReferee = await Referee.findOne({
     resume: resumeId,
-    $or: [{ email: newReferee.email }, { phone: newReferee.phone }],
+    $or: [{ email: value.email }, { phone: value.phone }],
   });
   if (existingReferee) throw new ConflictError("Resume already exists");
 
   // Create and save the new experience
   const referee = new Referee({
-    ...newReferee,
+    ...value,
     resume: resumeId,
   });
   await referee.save();
@@ -53,8 +60,11 @@ export async function getReferees(req, res) {
 
 // update existing referee for a specific resume
 export async function updateReferee(req, res) {
+  // validate and sanitize request
+  const { error, value } = updateRefereeBodySchema.validate(req.body);
+  if (error) throw new Error(error.details[0].message);
+
   const { resumeId, id } = req.params;
-  const updatedReferee = req.body;
 
   // check if resume exists
   const resume = await Resume.findById(resumeId);
@@ -66,7 +76,7 @@ export async function updateReferee(req, res) {
       resume: resumeId,
       _id: id,
     },
-    { ...updatedReferee },
+    { ...value },
     { new: true }
   );
   if (!existingReferee) throw new NotFoundError("Referee doesn't exists");
