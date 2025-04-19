@@ -7,14 +7,14 @@ import {
 import { verifyToken } from "../utils/jwt.util.js";
 
 const authenticate = async (req, res, next) => {
+  const authToken = req.headers.authorization
+    ? req.headers.authorization.split(" ")[1]
+    : "";
+
+  if (!authToken)
+    return next(new BadRequestError("Authorization token is required"));
+
   try {
-    const authToken = req.headers.authorization
-      ? req.headers.authorization.split(" ")[1]
-      : "";
-
-    if (!authToken)
-      return next(new BadRequestError("Authorization token is required"));
-
     // verify jwt token
     const isVerifiedUser = verifyToken(authToken);
     if (!isVerifiedUser) return next(new UnauthorizedError("Not authorized"));
@@ -26,9 +26,7 @@ const authenticate = async (req, res, next) => {
 
     next();
   } catch (error) {
-    next(
-      new UnauthorizedError("Invalid token or missing authorization header")
-    );
+    next(error);
   }
 };
 
