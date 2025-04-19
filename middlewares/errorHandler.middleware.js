@@ -1,3 +1,4 @@
+import { ValidationError } from "../utils/customErrors.util.js";
 import { errorLogger } from "../utils/errorLoggers.util.js";
 
 const errorHandler = (error, req, res, next) => {
@@ -19,6 +20,10 @@ const errorHandler = (error, req, res, next) => {
     message,
     stack,
   };
+
+  if (error instanceof ValidationError && error.details) {
+    resBody.errors = error.details;
+  }
 
   res.status(statusCode).json(resBody);
 };

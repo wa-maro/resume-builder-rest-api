@@ -1,4 +1,23 @@
 import Joi from "joi";
+import mongoose from "mongoose";
+
+const objectId = (value, helpers) => {
+  if (!mongoose.Types.ObjectId.isValid(value)) {
+    return helpers.error("any.invalid");
+  }
+  return value;
+};
+
+export const paramsWithIDsSchema = Joi.object({
+  resumeId: Joi.string().custom(objectId).messages({
+    "string.base": "ID must be a string",
+    "any.invalid": "ID must be a valid ObjectId",
+  }),
+  id: Joi.string().custom(objectId).messages({
+    "string.base": "ID must be a string",
+    "any.invalid": "ID must be a valid ObjectId",
+  }),
+}).or("id", "resumeId");
 
 export const createResumeBodySchema = Joi.object({
   title: Joi.string().optional().trim().messages({
@@ -424,7 +443,7 @@ export const updateRefereeBodySchema = Joi.object({
     "object.min": "At least one field must be provided to update.",
   });
 
-export const registerUserSchema = Joi.object({
+export const registerBodySchema = Joi.object({
   username: Joi.string().trim().min(3).max(30).required().messages({
     "string.base": "Username must be a text.",
     "string.empty": "Username is required.",
@@ -456,7 +475,7 @@ export const registerUserSchema = Joi.object({
   }),
 });
 
-export const loginUserSchema = Joi.object({
+export const loginBodySchema = Joi.object({
   usernameOrEmail: Joi.string().trim().required().messages({
     "string.base": "Username or email must be a text.",
     "string.empty": "Username or email is required.",

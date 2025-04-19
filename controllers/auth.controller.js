@@ -6,17 +6,9 @@ import {
 } from "../utils/customErrors.util.js";
 import { compareHash } from "../utils/hashing.util.js";
 import { generateToken } from "../utils/jwt.util.js";
-import {
-  loginUserSchema,
-  registerUserSchema,
-} from "../utils/validators.util.js";
 
 export const register = async (req, res) => {
-  // validate and sanitize request
-  const { error, value } = registerUserSchema.validate(req.body);
-  if (error) throw new Error(error.details[0].message);
-
-  const { username, email, password } = value;
+  const { username, email, password } = req.body;
 
   // check if user already exist
   const existingUser = await User.findOne({ username, email });
@@ -37,11 +29,7 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  // validate and sanitize request
-  const { error, value } = loginUserSchema.validate(req.body);
-  if (error) throw new Error(error.details[0].message);
-
-  const { username, password } = value;
+  const { username, password } = req.body;
 
   // check if user already exist
   const existingUser = await User.findOne({ username })

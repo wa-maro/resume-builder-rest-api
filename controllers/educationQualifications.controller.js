@@ -1,31 +1,20 @@
 import EducationBackground from "../models/EducationBackground.model.js";
 import Resume from "../models/Resume.model.js";
 import { NotFoundError } from "../utils/customErrors.util.js";
-import {
-  addEducationQualificationBodySchema,
-  updateEducationQualificationBodySchema,
-} from "../utils/validators.util.js";
 
 // add new education qualifications for a specific resume
 export const addEducationQualifications = async (req, res) => {
-  // validate and sanitize request
-  const { error, value: newQualifications } =
-    addEducationQualificationBodySchema.validate(req.body);
-  if (error) throw new Error(error.details[0].message);
-
-  const resumeId = req.params.resumeId;
-
   // check if resume exists
-  const resume = await Resume.findById(resumeId);
+  const resume = await Resume.findById(req.params.resumeId);
   if (!resume) throw new NotFoundError("Resume doesn't exists");
 
   // check if education background exists for given resume
   let educationBackground = await EducationBackground.findOne({
-    resume: resumeId,
+    resume: resume._id,
   });
   if (!educationBackground)
     educationBackground = new EducationBackground({
-      resume: resumeId,
+      resume: resume._id,
       educationQualifications: [],
       professionalQualifications: [],
     });
@@ -37,7 +26,7 @@ export const addEducationQualifications = async (req, res) => {
   }
 
   // add or update while generating new or preserving _id
-  for (const qualification of newQualifications) {
+  for (const qualification of req.body) {
     const existing = existingQualifications.get(qualification.level);
     if (existing)
       existingQualifications.set(qualification.level, {
@@ -63,15 +52,13 @@ export const addEducationQualifications = async (req, res) => {
 
 // get education qualifications for a specific resume
 export const getEducationQualifications = async (req, res) => {
-  const resumeId = req.params.resumeId;
-
   // Check if the resume exists
-  const resume = await Resume.findById(resumeId);
+  const resume = await Resume.findById(req.params.resumeId);
   if (!resume) throw new NotFoundError("Resume doesn't exists");
 
   // get education background by resume id and return it
   const educationBackground = await EducationBackground.findOne({
-    resume: resumeId,
+    resume: resume._id,
   });
 
   // Return json response
@@ -84,26 +71,20 @@ export const getEducationQualifications = async (req, res) => {
 
 // update education qualification for a specific resume
 export const updateEducationQualification = async (req, res) => {
-  const { error, value: updatedQualification } =
-    updateEducationQualificationBodySchema.validate(req.body);
-  if (error) throw new Error(error.details[0].message);
-
-  const { resumeId, id } = req.params;
-
   // Check if resume exists
-  const resume = await Resume.findById(resumeId);
+  const resume = await Resume.findById(req.params.resumeId);
   if (!resume) throw new NotFoundError("Resume doesn't exists");
 
   // Find the education background for this resume
   const educationBackground = await EducationBackground.findOne({
-    resume: resumeId,
+    resume: resume._id,
   });
   if (!educationBackground)
     throw new NotFoundError("Education Background doesn't exists");
 
   // Find the index of the qualification to update
   const index = educationBackground.educationQualifications.findIndex(
-    (qualification) => qualification._id.equals(id)
+    (qualification) => qualification._id.equals(req.params.id)
   );
 
   if (index === -1) throw new NotFoundError("Qualification doesn't exists");
@@ -111,7 +92,7 @@ export const updateEducationQualification = async (req, res) => {
   // Preserve the original _id and update the qualification
   educationBackground.educationQualifications[index] = {
     ...educationBackground.educationQualifications[index]._doc,
-    ...updatedQualification,
+    ...req.body,
   };
 
   // Save changes
@@ -128,15 +109,13 @@ export const updateEducationQualification = async (req, res) => {
 
 // add education qualification for a specific resume
 export const deleteEducationQualification = async (req, res) => {
-  const { resumeId, id } = req.params;
-
   // Check if resume exists
-  const resume = await Resume.findById(resumeId);
+  const resume = await Resume.findById(req.params.resumeId);
   if (!resume) throw new NotFoundError("Resume doesn't exists");
 
   // Find the education background for this resume
   const educationBackground = await EducationBackground.findOne({
-    resume: resumeId,
+    resume: resume._id,
   });
   if (!educationBackground)
     throw new NotFoundError("Education Background doesn't exists");
@@ -145,7 +124,7 @@ export const deleteEducationQualification = async (req, res) => {
   const originalLength = educationBackground.educationQualifications.length;
   educationBackground.educationQualifications =
     educationBackground.educationQualifications.filter((qualification) =>
-      qualification._id.equals(id)
+      qualification._id.equals(req.params.id)
     );
 
   if (educationBackground.educationQualifications.length === originalLength)

@@ -1,35 +1,27 @@
 import Skill from "../models/Skill.model.js";
 import Resume from "../models/Resume.model.js";
 import { ConflictError, NotFoundError } from "../utils/customErrors.util.js";
-import {
-  addSkillBodySchema,
-  updateSkillBodySchema,
-} from "../utils/validators.util.js";
 
 // add new skill for a specific resume
 export const addSkill = async (req, res) => {
-  // validate and sanitize request
-  const { error, value } = addSkillBodySchema.validate(req.body);
-  if (error) throw new Error(error.details[0].message);
-
-  const resumeId = req.params.resumeId;
+  const newSkill = req.body;
 
   // check if resume exists
-  const resume = await Resume.findById(resumeId);
+  const resume = await Resume.findById(req.params.resumeId);
   if (!resume) throw new NotFoundError("Resume doesn't exists");
 
   // check if skill for this resume already exist
   let existingSkill = await Skill.findOne({
-    resume: resumeId,
-    type: value.type,
-    name: value.name,
+    resume: resume._id,
+    type: newSkill.type,
+    name: newSkill.name,
   });
   if (existingSkill) throw new ConflictError("Skill already exists");
 
   // Create and save the new experience
   const skill = new Skill({
-    ...value,
-    resume: resumeId,
+    ...newSkill,
+    resume: resume._id,
   });
   await skill.save();
 
@@ -43,14 +35,12 @@ export const addSkill = async (req, res) => {
 
 // get all skill for a specific resume
 export const getSkills = async (req, res) => {
-  const resumeId = req.params.resumeId;
-
   // check if resume exists
-  const resume = await Resume.findById(resumeId);
+  const resume = await Resume.findById(req.params.resumeId);
   if (!resume) throw new NotFoundError("Resume doesn't exists");
 
   const skills = await Skill.find({
-    resume: resumeId,
+    resume: resume._id,
   }).lean();
 
   // return json response
@@ -63,23 +53,17 @@ export const getSkills = async (req, res) => {
 
 // update existing skill for a specific resume
 export const updateSkill = async (req, res) => {
-  // validate and sanitize request
-  const { error, value } = updateSkillBodySchema.validate(req.body);
-  if (error) throw new Error(error.details[0].message);
-
-  const { resumeId, id } = req.params;
-
   // check if resume exists
-  const resume = await Resume.findById(resumeId);
+  const resume = await Resume.findById(req.params.resumeId);
   if (!resume) throw new NotFoundError("Resume doesn't exists");
 
   // check if skill for this resume exists, update and return it
   let existingSkill = await Skill.findOneAndUpdate(
     {
-      resume: resumeId,
-      _id: id,
+      resume: resume._id,
+      _id: req.params.id,
     },
-    { ...value },
+    { ...req.body },
     { new: true }
   );
   if (!existingSkill) throw new NotFoundError("Skill doesn't exists");
@@ -94,16 +78,14 @@ export const updateSkill = async (req, res) => {
 
 // delete existing skill for a specific resume
 export const deleteSkill = async (req, res) => {
-  const { resumeId, id } = req.params;
-
   // check if resume exists
-  const resume = await Resume.findById(resumeId);
+  const resume = await Resume.findById(req.params.resumeId);
   if (!resume) throw new NotFoundError("Resume doesn't exists");
 
   // check if skill for this resume exists, and delete
   let existingSkill = await Skill.findOneAndDelete({
-    resume: resumeId,
-    _id: id,
+    resume: resume._id,
+    _id: req.params.id,
   });
   if (!existingSkill) throw new NotFoundError("Skill doesn't exists");
 

@@ -12,14 +12,36 @@ import workExperienceRouter from "./workExperience.router.js";
 import skillRouter from "./skill.router.js";
 import refereeRouter from "./referee.router.js";
 import tryCatch from "../utils/tryCatch.util.js";
+import validate from "../middlewares/validation.middleware.js";
+import {
+  createResumeBodySchema,
+  paramsWithIDsSchema,
+  updateResumeBodySchema,
+} from "../utils/validators.util.js";
 
 const resumeRouter = Router();
 
 resumeRouter
-  .post("/", tryCatch(createResume, "createResume"))
-  .get("/:id", tryCatch(getResume, "getResume"))
-  .patch("/:id", tryCatch(updateResume, "updateResume"))
-  .delete("/:id", tryCatch(deleteResume, "ddeleteResume"));
+  .post(
+    "/",
+    validate({ body: createResumeBodySchema }),
+    tryCatch(createResume, "createResume")
+  )
+  .get(
+    "/:resumeId",
+    validate({ params: paramsWithIDsSchema }),
+    tryCatch(getResume, "getResume")
+  )
+  .patch(
+    "/:resumeId",
+    validate({ body: updateResumeBodySchema, params: paramsWithIDsSchema }),
+    tryCatch(updateResume, "updateResume")
+  )
+  .delete(
+    "/:resumeId",
+    validate({ params: paramsWithIDsSchema }),
+    tryCatch(deleteResume, "ddeleteResume")
+  );
 
 resumeRouter
   .use("/:resumeId/personal-detail", personalDetailRouter)

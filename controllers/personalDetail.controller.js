@@ -5,17 +5,9 @@ import {
   ConflictError,
   NotFoundError,
 } from "../utils/customErrors.util.js";
-import {
-  addPersonalDetailBodySchema,
-  updatePersonalDetailBodySchema,
-} from "../utils/validators.util.js";
 
 // add new personal detail to a resume
 export const addPersonalDetail = async (req, res) => {
-  // validate and sanitize request
-  const { error, value } = addPersonalDetailBodySchema.validate(req.body);
-  if (error) throw new Error(error.details[0].message);
-
   // check if the resume exists and return it
   const resume = await Resume.findById(req.params.resumeId);
   if (!resume) throw new NotFoundError("Resume doesn't exists");
@@ -30,7 +22,7 @@ export const addPersonalDetail = async (req, res) => {
   // add personal detail and save it
   const newPersonalDetail = new PersonalDetail({
     resume: resume._id,
-    ...value,
+    ...req.body,
   });
   if (!newPersonalDetail)
     throw new BadRequestError("Failed to add personal detail");
@@ -68,10 +60,6 @@ export const getPersonalDetail = async (req, res) => {
 
 // add new personal detail to a resume
 export const updatePersonalDetail = async (req, res) => {
-  // validate and sanitize request
-  const { error, value } = updatePersonalDetailBodySchema.validate(req.body);
-  if (error) throw new Error(error.details[0].message);
-
   // check if the resume exists and return it
   const resume = await Resume.findById(req.params.resumeId);
   if (!resume) throw new NotFoundError("Resume doesn't exists");
@@ -79,7 +67,7 @@ export const updatePersonalDetail = async (req, res) => {
   // find existing personal detail and update it
   const updatedPersonalDetail = await PersonalDetail.findOneAndUpdate(
     { resume: resume._id, _id: req.params.id },
-    { ...value },
+    { ...req.body },
     { new: true }
   );
   if (!updatedPersonalDetail)

@@ -45,3 +45,12 @@ export class ConflictError extends CustomError {
     this.name = "ConflictError";
   }
 }
+
+// Data is semantically invalid.
+export class ValidationError extends CustomError {
+  constructor(message = "Validation Error", details = []) {
+    super(message, 422);
+    this.details = details;
+    this.name = "ValidationError";
+  }
+}
