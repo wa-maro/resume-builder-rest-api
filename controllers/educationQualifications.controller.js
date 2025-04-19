@@ -1,10 +1,18 @@
 import EducationBackground from "../models/EducationBackground.model.js";
 import Resume from "../models/Resume.model.js";
 import { NotFoundError } from "../utils/customErrors.util.js";
+import {
+  addEducationQualificationBodySchema,
+  updateEducationQualificationBodySchema,
+} from "../utils/validators.util.js";
 
 // add new education qualifications for a specific resume
-export const addEducationQualifications = async (req, res,) => {
-  const newQualifications = req.body.educationQualifications;
+export const addEducationQualifications = async (req, res) => {
+  // validate and sanitize request
+  const { error, value: newQualifications } =
+    addEducationQualificationBodySchema.validate(req.body);
+  if (error) throw new Error(error.details[0].message);
+
   const resumeId = req.params.resumeId;
 
   // check if resume exists
@@ -54,7 +62,7 @@ export const addEducationQualifications = async (req, res,) => {
 };
 
 // get education qualifications for a specific resume
-export const getEducationQualifications = async (req, res,) => {
+export const getEducationQualifications = async (req, res) => {
   const resumeId = req.params.resumeId;
 
   // Check if the resume exists
@@ -75,9 +83,12 @@ export const getEducationQualifications = async (req, res,) => {
 };
 
 // update education qualification for a specific resume
-export const updateEducationQualification = async (req, res,) => {
+export const updateEducationQualification = async (req, res) => {
+  const { error, value: updatedQualification } =
+    updateEducationQualificationBodySchema.validate(req.body);
+  if (error) throw new Error(error.details[0].message);
+
   const { resumeId, id } = req.params;
-  const updatedQualification = req.body;
 
   // Check if resume exists
   const resume = await Resume.findById(resumeId);
@@ -116,7 +127,7 @@ export const updateEducationQualification = async (req, res,) => {
 };
 
 // add education qualification for a specific resume
-export const deleteEducationQualification = async (req, res,) => {
+export const deleteEducationQualification = async (req, res) => {
   const { resumeId, id } = req.params;
 
   // Check if resume exists

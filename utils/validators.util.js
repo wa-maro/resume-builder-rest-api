@@ -468,3 +468,275 @@ export const loginUserSchema = Joi.object({
     "any.required": "Password is required.",
   }),
 });
+
+const gradeSchema = Joi.object({
+  division: Joi.string()
+    .valid("I", "II", "III", "IV", "0")
+    .required()
+    .messages({
+      "any.required":
+        "Division is required and must be one of the valid options: I, II, III, IV, 0.",
+    }),
+  points: Joi.string().trim().optional().allow("").messages({
+    "string.base": "Points must be a valid string.",
+  }),
+});
+
+export const addEducationQualificationBodySchema = Joi.object({
+  level: Joi.string()
+    .valid("Primary", "O-Level", "A-Level")
+    .required()
+    .messages({
+      "any.required":
+        "Level is required and must be one of: Primary, O-Level, or A-Level.",
+      "any.only": "Level must be one of: Primary, O-Level, or A-Level.",
+    }),
+  schoolName: Joi.string().trim().min(2).max(255).required().messages({
+    "string.base": "School name must be a valid string.",
+    "string.min": "School name must be at least 2 characters long.",
+    "string.max": "School name must be no longer than 255 characters.",
+    "any.required": "School name is required.",
+  }),
+  startYear: Joi.number()
+    .integer()
+    .min(1900)
+    .max(new Date().getFullYear())
+    .required()
+    .label("Start Year")
+    .messages({
+      "number.base": "Start year must be a valid number.",
+      "number.min": "Start year must be no earlier than 1900.",
+      "number.max": `Start year must not be later than ${new Date().getFullYear()}.`,
+      "any.required": "Start year is required.",
+    }),
+  endYear: Joi.number()
+    .integer()
+    .min(1900)
+    .max(new Date().getFullYear() + 10)
+    .required()
+    .label("End Year")
+    .custom((value, helpers) => {
+      const { startYear } = helpers?.state?.ancestors[0];
+      if (startYear && value < startYear) {
+        return helpers.message("End Year must be equal to or after Start Year");
+      }
+      return value;
+    })
+    .messages({
+      "number.base": "End year must be a valid number.",
+      "number.min": "End year must be no earlier than 1900.",
+      "number.max": `End year must not be later than ${
+        new Date().getFullYear() + 10
+      }.`,
+      "any.required": "End year is required.",
+    }),
+  certificate: Joi.string()
+    .valid(
+      "Primary School Leaving Examination (PSLE)",
+      "The Certificate of Secondary Education Examination (CSEE)",
+      "Advanced Certificate of Secondary Education Examination (ACSEE)"
+    )
+    .required()
+    .messages({
+      "any.required":
+        "Certificate is required and must be one of: PSLE, CSEE, ACSEE.",
+      "any.only": "Certificate must be one of: PSLE, CSEE, or ACSEE.",
+    }),
+  grade: gradeSchema.optional().messages({
+    "object.base": "Grade should be a valid object.",
+  }),
+});
+
+export const updateEducationQualificationBodySchema = Joi.object({
+  level: Joi.string().valid("Primary", "O-Level", "A-Level").messages({
+    "any.only": "Level must be one of: Primary, O-Level, or A-Level.",
+  }),
+  schoolName: Joi.string().trim().min(2).max(255).messages({
+    "string.base": "School name must be a valid string.",
+    "string.min": "School name must be at least 2 characters long.",
+    "string.max": "School name must be no longer than 255 characters.",
+  }),
+  startYear: Joi.number()
+    .integer()
+    .min(1900)
+    .max(new Date().getFullYear())
+    .label("Start Year")
+    .messages({
+      "number.base": "Start year must be a valid number.",
+      "number.min": "Start year must be no earlier than 1900.",
+      "number.max": `Start year must not be later than ${new Date().getFullYear()}.`,
+    }),
+  endYear: Joi.number()
+    .integer()
+    .min(1900)
+    .max(new Date().getFullYear() + 10)
+    .label("End Year")
+    .custom((value, helpers) => {
+      const { startYear } = helpers?.state?.ancestors[0];
+      if (startYear && value < startYear) {
+        return helpers.message("End Year must be equal to or after Start Year");
+      }
+      return value;
+    })
+    .messages({
+      "number.base": "End year must be a valid number.",
+      "number.min": "End year must be no earlier than 1900.",
+      "number.max": `End year must not be later than ${
+        new Date().getFullYear() + 10
+      }.`,
+    }),
+  certificate: Joi.string().valid(
+    "Primary School Leaving Examination (PSLE)",
+    "The Certificate of Secondary Education Examination (CSEE)",
+    "Advanced Certificate of Secondary Education Examination (ACSEE)"
+  ),
+  grade: gradeSchema.messages({
+    "object.base": "Grade should be a valid object.",
+  }),
+})
+  .min(1)
+  .messages({
+    "object.min": "At least one field must be provided to update.",
+  });
+
+const professionGradeSchema = Joi.object({
+  classification: Joi.string()
+    .valid("First Class", "Upper Second", "Lower Second", "Pass", "Fail")
+    .required()
+    .messages({
+      "any.required":
+        "Classification is required and must be one of: First Class, Upper Second, Lower Second, Pass, or Fail.",
+      "any.only":
+        "Classification must be one of: First Class, Upper Second, Lower Second, Pass, or Fail.",
+    }),
+  gpa: Joi.number().min(0).max(5).required().messages({
+    "number.base": "GPA must be a valid number.",
+    "number.min": "GPA cannot be less than 0.",
+    "number.max": "GPA cannot be more than 5.",
+    "any.required": "GPA is required.",
+  }),
+});
+
+export const addProfessionQualificationBodySchema = Joi.object({
+  institutionName: Joi.string().trim().min(2).max(255).required().messages({
+    "string.base": "Institution name must be a valid string.",
+    "string.min": "Institution name must be at least 2 characters long.",
+    "string.max": "Institution name must be no longer than 255 characters.",
+    "any.required": "Institution name is required.",
+  }),
+  qualification: Joi.string()
+    .valid(
+      "Diploma",
+      "Advanced Diploma",
+      "Bachelor's",
+      "Postgraduate Diploma",
+      "Master's",
+      "Doctorate (PhD)"
+    )
+    .required()
+    .messages({
+      "any.required":
+        "Qualification is required and must be one of: Diploma, Advanced Diploma, Bachelor's, Postgraduate Diploma, Master's, or Doctorate (PhD).",
+      "any.only":
+        "Qualification must be one of: Diploma, Advanced Diploma, Bachelor's, Postgraduate Diploma, Master's, or Doctorate (PhD).",
+    }),
+  programme: Joi.string().trim().optional().messages({
+    "string.base": "Programme must be a valid string.",
+  }),
+  startYear: Joi.number()
+    .integer()
+    .min(1900)
+    .max(new Date().getFullYear())
+    .required()
+    .label("Start Year")
+    .messages({
+      "number.base": "Start year must be a valid number.",
+      "number.min": "Start year must be no earlier than 1900.",
+      "number.max": `Start year must not be later than ${new Date().getFullYear()}.`,
+      "any.required": "Start year is required.",
+    }),
+  endYear: Joi.number()
+    .integer()
+    .min(1900)
+    .max(new Date().getFullYear() + 10)
+    .required()
+    .label("End Year")
+    .custom((value, helpers) => {
+      const { startYear } = helpers?.state?.ancestors[0];
+      if (startYear && value < startYear) {
+        return helpers.message("End Year must be equal to or after Start Year");
+      }
+      return value;
+    })
+    .messages({
+      "number.base": "End year must be a valid number.",
+      "number.min": "End year must be no earlier than 1900.",
+      "number.max": `End year must not be later than ${
+        new Date().getFullYear() + 10
+      }.`,
+      "any.required": "End year is required.",
+    }),
+  grade: professionGradeSchema.optional().messages({
+    "object.base": "Grade should be a valid object.",
+  }),
+});
+
+export const updateProfessionQualificationBodySchema = Joi.object({
+  institutionName: Joi.string().trim().min(2).max(255).messages({
+    "string.base": "Institution name must be a valid string.",
+    "string.min": "Institution name must be at least 2 characters long.",
+    "string.max": "Institution name must be no longer than 255 characters.",
+  }),
+  qualification: Joi.string()
+    .valid(
+      "Diploma",
+      "Advanced Diploma",
+      "Bachelor's",
+      "Postgraduate Diploma",
+      "Master's",
+      "Doctorate (PhD)"
+    )
+    .messages({
+      "any.only":
+        "Qualification must be one of: Diploma, Advanced Diploma, Bachelor's, Postgraduate Diploma, Master's, or Doctorate (PhD).",
+    }),
+  programme: Joi.string().trim().optional().messages({
+    "string.base": "Programme must be a valid string.",
+  }),
+  startYear: Joi.number()
+    .integer()
+    .min(1900)
+    .max(new Date().getFullYear())
+    .label("Start Year")
+    .messages({
+      "number.base": "Start year must be a valid number.",
+      "number.min": "Start year must be no earlier than 1900.",
+      "number.max": `Start year must not be later than ${new Date().getFullYear()}.`,
+    }),
+  endYear: Joi.number()
+    .integer()
+    .min(1900)
+    .max(new Date().getFullYear() + 10)
+    .label("End Year")
+    .custom((value, helpers) => {
+      const { startYear } = helpers?.state?.ancestors[0];
+      if (startYear && value < startYear) {
+        return helpers.message("End Year must be equal to or after Start Year");
+      }
+      return value;
+    })
+    .messages({
+      "number.base": "End year must be a valid number.",
+      "number.min": "End year must be no earlier than 1900.",
+      "number.max": `End year must not be later than ${
+        new Date().getFullYear() + 10
+      }.`,
+    }),
+  grade: professionGradeSchema.optional().messages({
+    "object.base": "Grade should be a valid object.",
+  }),
+})
+  .min(1)
+  .messages({
+    "object.min": "At least one field must be provided to update.",
+  });

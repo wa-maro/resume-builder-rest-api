@@ -1,10 +1,16 @@
 import EducationBackground from "../models/EducationBackground.model.js";
 import Resume from "../models/Resume.model.js";
 import { ConflictError, NotFoundError } from "../utils/customErrors.util.js";
+import { addProfessionQualificationBodySchema } from "../utils/validators.util.js";
 
 // add profession qualification(s) for a specific resume
-export const addProfessionQualification = async (req, res,) => {
-  let newQualifications = req.body.professionQualifications;
+export const addProfessionQualification = async (req, res) => {
+  // validate and sanitize request
+  const { error, value } = addProfessionQualificationBodySchema.validate(
+    req.body
+  );
+  if (error) throw new Error(error.details[0].message);
+
   const resumeId = req.params.resumeId;
 
   // Check if resume exists
@@ -19,13 +25,9 @@ export const addProfessionQualification = async (req, res,) => {
     throw new NotFoundError("Education Background doesn't exists");
 
   // Ensure qualifications are an array
-  newQualifications = Array.isArray(newQualifications)
-    ? newQualifications
-    : [newQualifications];
+  const newQualifications = Array.isArray(value) ? value : [value];
 
   // Push new qualifications with no dulpicates
-  // const duplicateQualifications = [];
-  // const addedQualifications = [];
   for (const newQualification of newQualifications) {
     const isQualificationexist =
       educationBackground.professionQualifications.some(
@@ -40,10 +42,8 @@ export const addProfessionQualification = async (req, res,) => {
     if (!isQualificationexist)
       educationBackground.professionQualifications.push(newQualification);
     else
-     (
-        new ConflictError(
-          `Duplicate ${newQualification.qualification} qualification`
-        )
+      new ConflictError(
+        `Duplicate ${newQualification.qualification} qualification`
       );
   }
 
@@ -59,7 +59,7 @@ export const addProfessionQualification = async (req, res,) => {
 };
 
 // get profession qualifications for a specific resume
-export const getProfessionQualifications = async (req, res,) => {
+export const getProfessionQualifications = async (req, res) => {
   const resumeId = req.params.resumeId;
 
   // Check if resume exists
@@ -83,9 +83,12 @@ export const getProfessionQualifications = async (req, res,) => {
 };
 
 // update profession qualification for a specific resume
-export const updateProfessionQualification = async (req, res,) => {
+export const updateProfessionQualification = async (req, res) => {
+  const { error, value: updatedQualification } =
+    updateEducationQualificationBodySchema.validate(req.body);
+  if (error) throw new Error(error.details[0].message);
+
   const { resumeId, id } = req.params;
-  const updatedQualification = req.body;
 
   // Check if resume exists
   const resume = await Resume.findById(resumeId);
@@ -115,7 +118,7 @@ export const updateProfessionQualification = async (req, res,) => {
 };
 
 // delete profession qualification for a specific resume
-export const deleteProfessionQualification = async (req, res,) => {
+export const deleteProfessionQualification = async (req, res) => {
   const { resumeId, id } = req.params;
 
   // Check if resume exists
