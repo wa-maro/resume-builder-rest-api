@@ -115,7 +115,7 @@ These endpoints allow you to manage higher education qualifications (e.g., Diplo
 
 ---
 
-### 🧠 Skills API Endpoints
+#### 🧠 Skills API Endpoints
 
 These endpoints allow you to manage the skills section of a resume. Each user can add, retrieve, update, or delete multiple skills under their resume.
 
@@ -130,7 +130,7 @@ These endpoints allow you to manage the skills section of a resume. Each user ca
 
 ---
 
-### 👥 Referee API Endpoints
+#### 👥 Referee API Endpoints
 
 These endpoints allow you to manage the referees section of a resume. Each user can add, retrieve, update, or delete multiple referees under their resume.
 
