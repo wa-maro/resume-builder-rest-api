@@ -1,11 +1,18 @@
 import Skill from "../models/Skill.model.js";
 import Resume from "../models/Resume.model.js";
-import { ConflictError } from "../utils/customErrors.util.js";
+import { ConflictError, NotFoundError } from "../utils/customErrors.util.js";
+import {
+  addSkillBodySchema,
+  updateSkillBodySchema,
+} from "../utils/validators.util.js";
 
 // add new skill for a specific resume
-export const addSkill = async (req, res,) => {
+export const addSkill = async (req, res) => {
+  // validate and sanitize request
+  const { error, value } = addSkillBodySchema.validate(req.body);
+  if (error) throw new Error(error.details[0].message);
+
   const resumeId = req.params.resumeId;
-  const newSkill = req.body;
 
   // check if resume exists
   const resume = await Resume.findById(resumeId);
@@ -14,14 +21,14 @@ export const addSkill = async (req, res,) => {
   // check if skill for this resume already exist
   let existingSkill = await Skill.findOne({
     resume: resumeId,
-    type: newSkill.type,
-    name: newSkill.name,
+    type: value.type,
+    name: value.name,
   });
   if (existingSkill) throw new ConflictError("Skill already exists");
 
   // Create and save the new experience
   const skill = new Skill({
-    ...newSkill,
+    ...value,
     resume: resumeId,
   });
   await skill.save();
@@ -35,7 +42,7 @@ export const addSkill = async (req, res,) => {
 };
 
 // get all skill for a specific resume
-export const getSkills = async (req, res,) => {
+export const getSkills = async (req, res) => {
   const resumeId = req.params.resumeId;
 
   // check if resume exists
@@ -55,9 +62,12 @@ export const getSkills = async (req, res,) => {
 };
 
 // update existing skill for a specific resume
-export const updateSkill = async (req, res,) => {
+export const updateSkill = async (req, res) => {
+  // validate and sanitize request
+  const { error, value } = updateSkillBodySchema.validate(req.body);
+  if (error) throw new Error(error.details[0].message);
+
   const { resumeId, id } = req.params;
-  const updatedSkill = req.body;
 
   // check if resume exists
   const resume = await Resume.findById(resumeId);
@@ -69,7 +79,7 @@ export const updateSkill = async (req, res,) => {
       resume: resumeId,
       _id: id,
     },
-    { ...updatedSkill },
+    { ...value },
     { new: true }
   );
   if (!existingSkill) throw new NotFoundError("Skill doesn't exists");
@@ -83,7 +93,7 @@ export const updateSkill = async (req, res,) => {
 };
 
 // delete existing skill for a specific resume
-export const deleteSkill = async (req, res,) => {
+export const deleteSkill = async (req, res) => {
   const { resumeId, id } = req.params;
 
   // check if resume exists

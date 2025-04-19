@@ -188,3 +188,49 @@ export const updatePersonalDetailBodySchema = Joi.object({
     }),
   }).optional(),
 });
+
+export const addSkillBodySchema = Joi.object({
+  name: Joi.string().required().trim().messages({
+    "string.base": "Skill name must be a text.",
+    "string.empty": "Skill name is required.",
+    "any.required": "Skill name is required.",
+  }),
+  description: Joi.string().optional().allow("").trim().messages({
+    "string.base": "Description must be a text.",
+  }),
+  proficiency: Joi.string()
+    .required()
+    .valid("beginner", "intermediate", "advanced", "expert")
+    .trim()
+    .messages({
+      "string.base": "Proficiency must be a text.",
+      "string.empty": "Proficiency is required.",
+      "any.required": "Proficiency is required.",
+      "any.only":
+        "Proficiency must be one of: beginner, intermediate, advanced, expert.",
+    }),
+  certification: Joi.string().optional().allow("").trim().messages({
+    "string.base": "Certification must be a text.",
+  }),
+});
+
+export const updateSkillBodySchema = Joi.object({
+  name: Joi.string().optional().trim().messages({
+    "string.base": "Skill name must be a text.",
+  }),
+  description: Joi.string().optional().allow("").trim().messages({
+    "string.base": "Description must be a text.",
+  }),
+  proficiency: Joi.string()
+    .optional()
+    .valid("beginner", "intermediate", "advanced", "expert")
+    .trim()
+    .messages({
+      "string.base": "Proficiency must be a text.",
+      "any.only":
+        "Proficiency must be one of: beginner, intermediate, advanced, expert.",
+    }),
+  certification: Joi.string().optional().allow("").trim().messages({
+    "string.base": "Certification must be a text.",
+  }),
+});
