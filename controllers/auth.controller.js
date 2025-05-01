@@ -42,6 +42,7 @@ export const login = async (req, res) => {
   // compare password
   const isMatch = compareHash(password, existingUser.password);
   if (!isMatch) throw new BadRequestError("Wrong credentials");
+  existingUser.role = "user";
   delete existingUser.password;
 
   // generate authentication token
