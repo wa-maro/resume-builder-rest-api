@@ -1,3 +1,5 @@
+#
+
 ## 🔐 Authentication API Endpoints
 
 These endpoints handle user account creation, login, logout, and password management. JWT tokens are required to access protected resources in the system.
@@ -61,7 +63,7 @@ Host: api.example.com
 Content-Type: application/json
 
 {
-  "email": "johndoe@example.com",
+  "usernameOrEmail": "johndoe@example.com",
   "password": "StrongP@ssword123"
 }
 ```
@@ -76,7 +78,7 @@ Content-Type: application/json
 
 | Field             | Type   | Required | Description                  |
 | ----------------- | ------ | -------- | ---------------------------- |
-| username or email | String | ✅       | Registered username or email |
+| usernameOrEmail | String | ✅       | Registered username or email |
 | password          | String | ✅       | Associated account password  |
 
 **Response:**
@@ -84,7 +86,12 @@ Content-Type: application/json
 ```json
 {
   "success": true,
-  "message": "Login successful",
+  "message": "User logged in successfully",
+   "user": {
+    "id": "680ccc5029c28a166080a99b",
+    "username": "johndoe",
+    "role": "user"
+  },
   "token": "jwt_token_here"
 }
 ```
