@@ -27,7 +27,7 @@ mongoose
   .catch((error) => console.log(error));
 
 app.use("/api/v0/auth", authRouter);
-app.use("/api/v0/resumes", authenticate, resumeRouter);
+app.use("/api/v0/resume", authenticate, resumeRouter);
 
 app.use(errorHandler);
 

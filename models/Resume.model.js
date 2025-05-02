@@ -12,11 +12,10 @@ const ResumeSchema = new mongoose.Schema(
     title: { type: String, required: true, trim: true },
     summary: { type: String, required: true, trim: true, default: "" },
     declaration: {
-      statement: { type: String, required: true, trim: true },
-      signature: { type: String, required: true, trim: true },
+      statement: { type: String, trim: true, default: "" },
+      signature: { type: String, trim: true, default: "" },
       date: {
         type: String,
-        required: true,
         trim: true,
         validate: {
           validator: function (v) {

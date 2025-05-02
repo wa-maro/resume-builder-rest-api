@@ -16,7 +16,11 @@ export const createResume = async (req, res) => {
   res.status(200).json({
     success: true,
     message: "New resume created successfully",
-    resume: savedResume,
+    resume: {
+      id: savedResume._id,
+      title: savedResume.title,
+      summary: savedResume.summary,
+    },
   });
 };
 
