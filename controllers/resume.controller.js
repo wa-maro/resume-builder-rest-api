@@ -16,28 +16,21 @@ export const createResume = async (req, res) => {
   res.status(200).json({
     success: true,
     message: "New resume created successfully",
-    resume: {
-      id: savedResume._id,
-      title: savedResume.title,
-      summary: savedResume.summary,
-    },
+    data: savedResume,
   });
 };
 
 // retrieve existing resume by id: for specific user
 export const getResume = async (req, res) => {
   // get a resume by given user and return it
-  const existingResume = await Resume.findOne({
-    user: req.user.id,
-    _id: req.params.resumeId,
-  });
+  const existingResume = await Resume.findOne({ user: req.user.id });
   if (!existingResume) throw new NotFoundError("Resume doesn't exists");
 
   // return json response
   res.status(200).json({
     success: true,
     message: "Resume retrieved successfully",
-    resume: existingResume,
+    data: existingResume,
   });
 };
 
@@ -58,7 +51,7 @@ export const updateResume = async (req, res) => {
   res.status(200).json({
     success: true,
     message: "Resume updated successfully",
-    resume: updatedResume,
+    data: updatedResume,
   });
 };
 

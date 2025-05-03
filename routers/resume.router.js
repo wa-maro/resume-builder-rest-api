@@ -27,11 +27,7 @@ resumeRouter
     validate({ body: createResumeBodySchema }),
     tryCatch(createResume, "createResume")
   )
-  .get(
-    "/:resumeId",
-    validate({ params: paramsWithIDsSchema }),
-    tryCatch(getResume, "getResume")
-  )
+  .get("/", tryCatch(getResume, "getResume"))
   .patch(
     "/:resumeId",
     validate({ body: updateResumeBodySchema, params: paramsWithIDsSchema }),
