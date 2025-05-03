@@ -5,7 +5,7 @@ import {
   getResume,
   updateResume,
 } from "../controllers/resume.controller.js";
-import personalDetailRouter from "./personalDetail.router.js";
+import personalInfoRouter from "./personalInfo.router.js";
 import educationQualificationsRouter from "./educationQualifications.router.js";
 import professionQualificationsRouter from "./professionQualifications.router.js";
 import workExperienceRouter from "./workExperience.router.js";
@@ -40,7 +40,7 @@ resumeRouter
   );
 
 resumeRouter
-  .use("/:resumeId/personal-detail", personalDetailRouter)
+  .use("/:resumeId/personal-information", personalInfoRouter)
   .use("/:resumeId/education-qualifications", educationQualificationsRouter)
   .use("/:resumeId/profession-qualifications", professionQualificationsRouter)
   .use("/:resumeId/work-experiences", workExperienceRouter)
