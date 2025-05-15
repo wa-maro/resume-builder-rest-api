@@ -158,8 +158,8 @@ export const updatePersonalInfoBodySchema = Joi.object({
     "string.base": "Full name must be a text.",
   }),
 
-  gender: Joi.string().valid("Male", "Female").optional().trim().messages({
-    "any.only": "Gender must be either 'Male' or 'Female'.",
+  gender: Joi.string().valid("male", "female").optional().trim().messages({
+    "any.only": "Gender must be either 'male' or 'female'.",
     "string.base": "Gender must be a text.",
   }),
   dateOfBirth: Joi.string()
@@ -177,13 +177,13 @@ export const updatePersonalInfoBodySchema = Joi.object({
     "string.base": "Place of Domicile must be a text.",
   }),
   maritualStatus: Joi.string()
-    .valid("Single", "Married", "Divorced", "Widowed")
+    .valid("single", "married", "divorced", "widowed")
     .optional()
     .trim()
     .messages({
       "string.base": "Maritual status must be a text.",
       "any.only":
-        "Maritual status must be one of: Single, Married, Divorced, Widowed.",
+        "Maritual status must be one of: single, married, divorced, widowed.",
     }),
   disabilities: Joi.array()
     .items(

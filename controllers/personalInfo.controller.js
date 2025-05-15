@@ -13,7 +13,7 @@ export const addPersonalInfo = async (req, res) => {
   if (!resume) throw new NotFoundError("Resume doesn't exists");
 
   // check if personal information already exist for given resume
-  const existingInfo = await PersonalInfo.findOne({ resume: resume._id });
+  const existingInfo = await PersonalInfo.findOne({ resume: resume._id }).select('-__v');
   if (existingInfo)
     throw new ConflictError("Personal Information already exists");
 
@@ -30,14 +30,14 @@ export const addPersonalInfo = async (req, res) => {
   });
 };
 
-// add new personal information to a resume
+// get exisitng personal information to a resume
 export const getPersonalInfo = async (req, res) => {
   // check if the resume exists and return it
   const resume = await Resume.findById(req.params.resumeId);
   if (!resume) throw new NotFoundError("Resume doesn't exists");
 
   // find existing personal information and return it
-  const existingInfo = await PersonalInfo.findOne({ resume: resume._id });
+  const existingInfo = await PersonalInfo.findOne({ resume: resume._id }).select('-__v');
   if (!existingInfo)
     throw new NotFoundError("Personal information doesn't exists");
 
