@@ -15,7 +15,7 @@ export const register = async (req, res) => {
   if (existingUser) throw new ConflictError("User already exists");
 
   // create user and save it
-  const newUser = await User({ username, email, password });
+  const newUser = new User({ username, email, password });
   if (!newUser) throw new BadRequestError("User not created");
 
   const savedUser = await newUser.save();
@@ -34,6 +34,7 @@ export const login = async (req, res) => {
   // check if user already exist
   const existingUser = await User.findOne({
     $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
+    isActive: true,
   })
     .select("+password")
     .lean();
@@ -42,7 +43,6 @@ export const login = async (req, res) => {
   // compare password
   const isMatch = compareHash(password, existingUser.password);
   if (!isMatch) throw new BadRequestError("Wrong credentials");
-  existingUser.role = "user";
   delete existingUser.password;
 
   // generate authentication token
@@ -56,7 +56,45 @@ export const login = async (req, res) => {
       id: existingUser._id,
       username: existingUser.username,
       role: existingUser.role,
+      email: existingUser.email,
     },
     token,
+  });
+};
+
+export const getAccount = async (req, res) => {
+  const { username } = req.params;
+
+  const user = await User.findOne({ username, isActive: true }).select(
+    "-password"
+  );
+  if (!user) throw new NotFoundError("User not found");
+
+  res.status(200).json({
+    success: true,
+    message: "Account retrieved successfully",
+    data: user,
+  });
+};
+
+export const updateAccount = async (req, res) => {
+  const { username } = req.params;
+  const { newUsername, newEmail, newPassword } = req.body;
+
+  const existingUser = await User.findOne({ username, isActive: true });
+  if (!existingUser) throw new NotFoundError("User not found");
+
+  if (newUsername) existingUser.username = newUsername;
+  if (newEmail) existingUser.email = newEmail;
+
+  if (newPassword) existingUser.password = newPassword;
+
+  const updatedUser = await existingUser.save();
+  updatedUser.password = undefined;
+
+  res.status(200).json({
+    success: true,
+    message: "Account updated successfully",
+    data: updatedUser,
   });
 };

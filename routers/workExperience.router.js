@@ -9,9 +9,9 @@ import tryCatch from "../utils/tryCatch.util.js";
 import validate from "../middlewares/validation.middleware.js";
 import {
   addWorkExperienceBodySchema,
-  paramsWithIDsSchema,
   updateWorkExperienceBodySchema,
-} from "../utils/validators.util.js";
+} from "../utils/validations/workExperience.validation.js";
+import { paramsWithIDsSchema } from "../utils/validators.util.js";
 
 const workExperienceRouter = Router({ mergeParams: true });
 

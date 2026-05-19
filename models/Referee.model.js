@@ -7,10 +7,10 @@ const RefereeSchema = new mongoose.Schema(
       ref: "Resume",
       required: true,
     },
-    name: { type: String, required: true, trim: true },
+    fullName: { type: String, required: true, trim: true },
     position: { type: String, required: true, trim: true },
     organization: { type: String, required: true, trim: true },
-    address: { type: String, required: false },
+    physicalAddress: { type: String, required: false },
     email: {
       type: String,
       required: true,

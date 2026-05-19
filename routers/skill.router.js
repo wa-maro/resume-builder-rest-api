@@ -7,17 +7,21 @@ import {
 } from "../controllers/skill.controller.js";
 import tryCatch from "../utils/tryCatch.util.js";
 import validate from "../middlewares/validation.middleware.js";
+import { paramsWithIDsSchema } from "../utils/validators.util.js";
 import {
   addSkillBodySchema,
-  paramsWithIDsSchema,
   updateSkillBodySchema,
-} from "../utils/validators.util.js";
+} from "../utils/validations/skills.validation.js";
+import upload from "../utils/upload.js";
+import skillNormalizeBody from "../middlewares/normalize.middleware.js";
 
 const skillRouter = Router({ mergeParams: true });
 
 skillRouter
   .post(
     "/",
+    upload.single("certificate"),
+    skillNormalizeBody,
     validate({ body: addSkillBodySchema, params: paramsWithIDsSchema }),
     tryCatch(addSkill, "addSkill")
   )
@@ -28,6 +32,8 @@ skillRouter
   )
   .patch(
     "/:id",
+    upload.single("certificate"),
+    skillNormalizeBody,
     validate({ body: updateSkillBodySchema, params: paramsWithIDsSchema }),
     tryCatch(updateSkill, "updateSkill")
   )

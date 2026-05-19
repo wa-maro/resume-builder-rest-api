@@ -11,6 +11,7 @@ const ResumeSchema = new mongoose.Schema(
     },
     title: { type: String, required: true, trim: true },
     summary: { type: String, required: true, trim: true, default: "" },
+    avatar: { type: String, trim: true },
     declaration: {
       statement: { type: String, trim: true, default: "" },
       signature: { type: String, trim: true, default: "" },
@@ -28,10 +29,48 @@ const ResumeSchema = new mongoose.Schema(
         },
       },
     },
-    
+    isActive: { type: Boolean, default: true },
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
+
+ResumeSchema.virtual("personalInfo", {
+  ref: "PersonalInfomation", // model name
+  localField: "_id", // field in Resume
+  foreignField: "resume", // field in PersonalInfo
+  justOne: true, // because one resume has one personalInfo
+});
+
+ResumeSchema.virtual("educationBackground", {
+  ref: "EducationBackground",
+  localField: "_id",
+  foreignField: "resume",
+  justOne: true, // one-to-one
+});
+
+ResumeSchema.virtual("projects", {
+  ref: "Project",
+  localField: "_id",
+  foreignField: "resume",
+});
+
+ResumeSchema.virtual("workExperiences", {
+  ref: "WorkExperience",
+  localField: "_id",
+  foreignField: "resume",
+});
+
+ResumeSchema.virtual("skills", {
+  ref: "Skill",
+  localField: "_id",
+  foreignField: "resume",
+});
+
+ResumeSchema.virtual("referees", {
+  ref: "Referee",
+  localField: "_id",
+  foreignField: "resume",
+});
 
 // define a Resume model
 const Resume = mongoose.model("Resume", ResumeSchema);

@@ -7,11 +7,11 @@ import {
 } from "../controllers/referee.controller.js";
 import tryCatch from "../utils/tryCatch.util.js";
 import validate from "../middlewares/validation.middleware.js";
+import { paramsWithIDsSchema } from "../utils/validators.util.js";
 import {
   addRefereeBodySchema,
-  paramsWithIDsSchema,
   updateRefereeBodySchema,
-} from "../utils/validators.util.js";
+} from "../utils/validations/referee.validation.js";
 
 const refereeRouter = Router({ mergeParams: true });
 

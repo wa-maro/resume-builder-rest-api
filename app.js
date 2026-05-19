@@ -8,6 +8,9 @@ import authRouter from "./routers/auth.router.js";
 import authenticate from "./middlewares/auth.middleware.js";
 import errorHandler from "./middlewares/errorHandler.middleware.js";
 import { infoLogger } from "./utils/errorLoggers.util.js";
+import adminRouter from "./routers/admin/admin.router.js";
+import faqRouter from "./routers/faqs.router.js";
+import messageRouter from "./routers/messages.router.js";
 
 const app = express();
 
@@ -16,10 +19,20 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(helmet()); // Set the security headers
-app.use(cors()); // Enable CORS before anything that needs to send headers
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false, // disable CORP for serving static files
+  })
+); // Set the security headers
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+); // Enable CORS before anything that needs to send headers
 app.use(express.json());
 app.use(cookieParser()); // Parse cookies before you use them (e.g., in auth middleware)
+app.use("/uploads", express.static("uploads"));
 
 mongoose
   .connect(process.env.MONGO_URI)
@@ -28,6 +41,9 @@ mongoose
 
 app.use("/api/v0/auth", authRouter);
 app.use("/api/v0/resume", authenticate, resumeRouter);
+app.use("/api/v0/faqs", faqRouter);
+app.use("/api/v0/messages", messageRouter);
+app.use("/api/v1/admin", authenticate, adminRouter);
 
 app.use(errorHandler);
 

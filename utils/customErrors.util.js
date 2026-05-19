@@ -1,4 +1,4 @@
-class CustomError extends Error {
+class ApiError extends Error {
   constructor(message = "Internal Server Error", statusCode = 500) {
     super(message);
     this.statusCode = statusCode;
@@ -7,7 +7,7 @@ class CustomError extends Error {
 }
 
 // Invalid request payload or syntax.
-export class BadRequestError extends CustomError {
+export class BadRequestError extends ApiError {
   constructor(message = "Bad Request") {
     super(message, 400);
     this.name = "BadRequestError";
@@ -15,7 +15,7 @@ export class BadRequestError extends CustomError {
 }
 
 // Authentication required.
-export class UnauthorizedError extends CustomError {
+export class UnauthorizedError extends ApiError {
   constructor(message = "Unauthorized") {
     super(message, 401);
     this.name = "UnauthorizedError";
@@ -23,7 +23,7 @@ export class UnauthorizedError extends CustomError {
 }
 
 // Authenticated, but not authorized.
-export class ForbiddenError extends CustomError {
+export class ForbiddenError extends ApiError {
   constructor(message = "Forbidden") {
     super(message, 403);
     this.name = "ForbiddenError";
@@ -31,7 +31,7 @@ export class ForbiddenError extends CustomError {
 }
 
 // Resource not found.
-export class NotFoundError extends CustomError {
+export class NotFoundError extends ApiError {
   constructor(message = "Not Found") {
     super(message, 404);
     this.name = "NotFoundError";
@@ -39,7 +39,7 @@ export class NotFoundError extends CustomError {
 }
 
 // Conflict with current state.
-export class ConflictError extends CustomError {
+export class ConflictError extends ApiError {
   constructor(message = "Conflict") {
     super(message, 409);
     this.name = "ConflictError";
@@ -47,7 +47,7 @@ export class ConflictError extends CustomError {
 }
 
 // Data is semantically invalid.
-export class ValidationError extends CustomError {
+export class ValidationError extends ApiError {
   constructor(message = "Validation Error", details = []) {
     super(message, 422);
     this.details = details;

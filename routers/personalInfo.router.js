@@ -6,11 +6,11 @@ import {
 } from "../controllers/personalInfo.controller.js";
 import tryCatch from "../utils/tryCatch.util.js";
 import validate from "../middlewares/validation.middleware.js";
+import { paramsWithIDsSchema } from "../utils/validators.util.js";
 import {
   addPersonalInfoBodySchema,
-  paramsWithIDsSchema,
   updatePersonalInfoBodySchema,
-} from "../utils/validators.util.js";
+} from "../utils/validations/personalInfo.validation.js";
 
 const personalInfoRouter = Router({ mergeParams: true });
 
