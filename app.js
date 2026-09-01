@@ -25,9 +25,11 @@ app.use(
   }),
 ); // Set the security headers
 
+const allowedOrigin = process.env.FRONTEND_ORIGIN ?? "http://localhost:5173";
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: allowedOrigin,
     credentials: true,
   }),
 ); // Enable CORS before anything that needs to send headers
