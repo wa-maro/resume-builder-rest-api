@@ -17,7 +17,7 @@ usersAdminRouter
   .patch(
     "/:username",
     validate({ body: EditUserBodySchema }),
-    tryCatch(updateUser, "updateUser")
+    tryCatch(updateUser, "updateUser"),
   )
   .delete("/:username", tryCatch(deleteUser, "deleteUser"));
 

@@ -22,14 +22,16 @@ app.use((req, res, next) => {
 app.use(
   helmet({
     crossOriginResourcePolicy: false, // disable CORP for serving static files
-  })
+  }),
 ); // Set the security headers
+
 app.use(
   cors({
     origin: "http://localhost:5173",
     credentials: true,
-  })
+  }),
 ); // Enable CORS before anything that needs to send headers
+
 app.use(express.json());
 app.use(cookieParser()); // Parse cookies before you use them (e.g., in auth middleware)
 app.use("/uploads", express.static("uploads"));
@@ -48,5 +50,5 @@ app.use("/api/v1/admin", authenticate, adminRouter);
 app.use(errorHandler);
 
 app.listen(process.env.PORT, () =>
-  console.log(`Server started at ${process.env.PORT}`)
+  console.log(`Server started at ${process.env.PORT}`),
 );

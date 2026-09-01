@@ -21,7 +21,7 @@ projectsAdminRouter
     upload.single("image"),
     normalizeProjectBody,
     validate(editProjectBodySchema),
-    tryCatch(updateProject, "updateProject")
+    tryCatch(updateProject, "updateProject"),
   )
   .delete("/:id", tryCatch(deleteProject, "deleteProject"));
 

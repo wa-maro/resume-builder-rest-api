@@ -55,7 +55,7 @@ export const updateUser = async (req, res) => {
   const user = await User.findOneAndUpdate(
     { username },
     { ...req.body },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   );
 
   if (!user) throw new NotFoundError("User not found");
@@ -73,7 +73,7 @@ export const deleteUser = async (req, res) => {
   const user = await User.findOneAndUpdate(
     { username },
     { isActive: false },
-    { new: true }
+    { new: true },
   );
 
   if (!user) throw new NotFoundError("User not found");

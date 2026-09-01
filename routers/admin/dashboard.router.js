@@ -8,5 +8,5 @@ export default dashboardAdminRouter;
 
 dashboardAdminRouter.get(
   "/stats",
-  tryCatch(getDashboardStats, "getDashboardStats")
+  tryCatch(getDashboardStats, "getDashboardStats"),
 );

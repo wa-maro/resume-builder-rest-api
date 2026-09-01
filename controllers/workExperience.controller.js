@@ -79,7 +79,7 @@ export const updateWorkExperience = async (req, res) => {
     workExperience = await WorkExperience.findOneAndUpdate(
       { resume: resume._id, _id: req.params.id },
       { ...req.body },
-      { new: true, runValidators: true } // ensure schema validation runs
+      { new: true, runValidators: true }, // ensure schema validation runs
     ).lean();
   } catch (err) {
     if (err.code === 11000) {

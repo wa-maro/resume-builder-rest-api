@@ -24,11 +24,11 @@ academicsAdminRouter
     ]),
     normalizeAcademicBody,
     validate(editAcademicQualificationBodySchema),
-    tryCatch(updateAcademicQualification, "updateAcademicQualification")
+    tryCatch(updateAcademicQualification, "updateAcademicQualification"),
   )
   .delete(
     "/:id",
-    tryCatch(deleteAcademicQualification, "deleteAcademicQualification")
+    tryCatch(deleteAcademicQualification, "deleteAcademicQualification"),
   );
 
 export default academicsAdminRouter;

@@ -22,12 +22,12 @@ workExperienceRouter
       body: addWorkExperienceBodySchema,
       params: paramsWithIDsSchema,
     }),
-    tryCatch(addWorkExperience, "addWorkExperience")
+    tryCatch(addWorkExperience, "addWorkExperience"),
   )
   .get(
     "/",
     validate({ params: paramsWithIDsSchema }),
-    tryCatch(getWorkExperiences, "getWorkExperiences")
+    tryCatch(getWorkExperiences, "getWorkExperiences"),
   )
   .patch(
     "/:id",
@@ -35,12 +35,12 @@ workExperienceRouter
       body: updateWorkExperienceBodySchema,
       params: paramsWithIDsSchema,
     }),
-    tryCatch(updateWorkExperience, "updateWorkExperience")
+    tryCatch(updateWorkExperience, "updateWorkExperience"),
   )
   .delete(
     "/:id",
     validate({ params: paramsWithIDsSchema }),
-    tryCatch(deleteWorkExperience, "deleteWorkExperience")
+    tryCatch(deleteWorkExperience, "deleteWorkExperience"),
   );
 
 export default workExperienceRouter;

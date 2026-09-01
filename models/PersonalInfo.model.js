@@ -64,7 +64,7 @@ const PersonalInfoSchema = new mongoose.Schema(
     },
     physicalAddress: { type: String, required: true, trim: true },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // define a Personal Infomation model

@@ -19,14 +19,14 @@ authRouter
   .post(
     "/register",
     validate({ body: registerBodySchema }),
-    tryCatch(register, "register")
+    tryCatch(register, "register"),
   )
   .post("/login", validate({ body: loginBodySchema }), tryCatch(login, "login"))
   .get("/account/:username", tryCatch(getAccount, "getAccount"))
   .patch(
     "/account/:username",
     validate(updateAccountBodySchema),
-    tryCatch(updateAccount, "updateAccount")
+    tryCatch(updateAccount, "updateAccount"),
   );
 
 export default authRouter;

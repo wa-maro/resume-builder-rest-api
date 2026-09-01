@@ -26,12 +26,12 @@ schoolQualificationsRouter
       body: addSchoolQualificationBodySchema,
       params: paramsWithIDsSchema,
     }),
-    tryCatch(addSchoolQualifications, "addSchoolQualifications")
+    tryCatch(addSchoolQualifications, "addSchoolQualifications"),
   )
   .get(
     "/",
     validate({ params: paramsWithIDsSchema }),
-    tryCatch(getSchoolQualifications, "getSchoolQualifications")
+    tryCatch(getSchoolQualifications, "getSchoolQualifications"),
   )
   .patch(
     "/:id",
@@ -41,12 +41,12 @@ schoolQualificationsRouter
       body: updateSchoolQualificationBodySchema,
       params: paramsWithIDsSchema,
     }),
-    tryCatch(updateSchoolQualification, "updateSchoolQualification")
+    tryCatch(updateSchoolQualification, "updateSchoolQualification"),
   )
   .delete(
     "/:id",
     validate({ params: paramsWithIDsSchema }),
-    tryCatch(deleteSchoolQualification, "deleteSchoolQualification")
+    tryCatch(deleteSchoolQualification, "deleteSchoolQualification"),
   );
 
 export default schoolQualificationsRouter;

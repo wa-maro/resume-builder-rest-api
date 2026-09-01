@@ -23,24 +23,24 @@ projectRouter
     upload.single("image"),
     normalizeProjectBody,
     validate({ body: addProjectBodySchema, params: paramsWithIDsSchema }),
-    tryCatch(addProject, "addProject")
+    tryCatch(addProject, "addProject"),
   )
   .get(
     "/",
     validate({ params: paramsWithIDsSchema }),
-    tryCatch(getProjects, "getProjects")
+    tryCatch(getProjects, "getProjects"),
   )
   .patch(
     "/:id",
     upload.single("image"),
     normalizeProjectBody,
     validate({ body: updateProjectBodySchema, params: paramsWithIDsSchema }),
-    tryCatch(updateProject, "updateProject")
+    tryCatch(updateProject, "updateProject"),
   )
   .delete(
     "/:id",
     validate({ params: paramsWithIDsSchema }),
-    tryCatch(deleteProject, "deleteProject")
+    tryCatch(deleteProject, "deleteProject"),
   );
 
 export default projectRouter;

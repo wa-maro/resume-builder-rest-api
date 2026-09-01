@@ -59,7 +59,7 @@ export const deactivateMessage = async (req, res) => {
   const message = await Message.findByIdAndUpdate(
     id,
     { isActive: false },
-    { new: true }
+    { new: true },
   );
 
   if (!message) throw new NotFoundError("Message not found");

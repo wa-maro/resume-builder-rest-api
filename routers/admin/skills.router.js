@@ -21,7 +21,7 @@ skillsAdminRouter
     upload.single("certificate"),
     skillNormalizeBody,
     validate(editSkillBodySchema),
-    tryCatch(updateSkill, "updateSkill")
+    tryCatch(updateSkill, "updateSkill"),
   )
   .delete("/:id", tryCatch(deleteSkill, "deleteSkill"));
 

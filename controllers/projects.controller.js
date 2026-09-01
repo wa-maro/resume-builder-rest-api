@@ -103,7 +103,7 @@ export const updateProject = async (req, res) => {
   const existingProject = await Project.findOneAndUpdate(
     { resume: resume._id, _id: req.params.id },
     updateData,
-    { new: true }
+    { new: true },
   );
   if (!existingProject) throw new NotFoundError("Project not found");
 

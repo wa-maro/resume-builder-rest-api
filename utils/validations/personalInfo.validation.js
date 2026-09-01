@@ -43,8 +43,8 @@ export const addPersonalInfoBodySchema = Joi.object({
         "hearing",
         "mobility",
         "cognitive",
-        "other"
-      )
+        "other",
+      ),
     )
     .default(["none"])
     .custom((value, helpers) => {
@@ -120,8 +120,8 @@ export const updatePersonalInfoBodySchema = Joi.object({
         "hearing",
         "mobility",
         "cognitive",
-        "other"
-      )
+        "other",
+      ),
     )
     .custom((value, helpers) => {
       if (value.includes("none") && value.length > 1) {

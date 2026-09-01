@@ -30,7 +30,7 @@ const RefereeSchema = new mongoose.Schema(
       ],
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 RefereeSchema.index({ resume: 1, email: 1 }, { unique: true });

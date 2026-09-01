@@ -17,7 +17,7 @@ personalInfoAdminRouter
   .patch(
     "/:id",
     validate(editPersonalInfoBodySchema),
-    tryCatch(updatePersonalInfo, "updatePersonalInfo")
+    tryCatch(updatePersonalInfo, "updatePersonalInfo"),
   )
   .delete("/:id", tryCatch(deletePersonalInfo, "deletePersonalInfo"));
 

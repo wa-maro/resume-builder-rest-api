@@ -23,13 +23,13 @@ const EducationBackgroundSchema = new mongoose.Schema(
     },
     academicQualifications: [AcademicQualificationSchema],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // define a Education Background model
 const EducationBackground = mongoose.model(
   "EducationBackground",
-  EducationBackgroundSchema
+  EducationBackgroundSchema,
 );
 
 export default EducationBackground;

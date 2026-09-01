@@ -58,7 +58,7 @@ export const updateResume = async (req, res) => {
       _id: req.params.resumeId,
     },
     updateData, // <-- use normalized + file data
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   );
 
   if (!updatedResume) throw new NotFoundError("Resume doesn't exist");

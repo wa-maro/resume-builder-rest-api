@@ -25,7 +25,11 @@ const UserSchema = new mongoose.Schema(
     password: { type: String, required: true, trim: true, select: false },
     isActive: { type: Boolean, default: true },
   },
-  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  },
 );
 
 // hash the password before saving it

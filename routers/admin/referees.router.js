@@ -17,7 +17,7 @@ refereesAdminRouter
   .patch(
     "/:id",
     validate(editRefereeBodySchema),
-    tryCatch(updateReferee, "updateReferee")
+    tryCatch(updateReferee, "updateReferee"),
   )
   .delete("/:id", tryCatch(deleteReferee, "deleteReferee"));
 

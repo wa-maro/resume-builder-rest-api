@@ -19,7 +19,7 @@ export const getPersonalInfos = async (req, res) => {
 
   const personalInfos = await PersonalInfo.find(
     query,
-    "_id fullName gender phone email physicalAddress"
+    "_id fullName gender phone email physicalAddress",
   )
     .populate("resume", "_id title")
     .sort({ [sort]: -1 })

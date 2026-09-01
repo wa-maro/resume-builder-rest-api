@@ -17,7 +17,7 @@ resumesAdminRouter
   .patch(
     "/:id",
     validate(EditResumeBodySchema),
-    tryCatch(updateResume, "updateResume")
+    tryCatch(updateResume, "updateResume"),
   )
   .delete("/:id", tryCatch(deleteResume, "deleteResume"));
 

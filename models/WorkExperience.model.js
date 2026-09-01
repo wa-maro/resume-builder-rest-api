@@ -5,7 +5,7 @@ const CompanySchema = new mongoose.Schema(
     name: { type: String, required: true, trim: true },
     location: { type: String, required: true, trim: true },
   },
-  { _id: false } // don’t create separate _id for nested docs
+  { _id: false }, // don’t create separate _id for nested docs
 );
 
 // define Work Experience schema
@@ -31,7 +31,7 @@ const WorkExperienceSchema = new mongoose.Schema(
       validate: {
         validator: function (v) {
           return /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s\d{4}$/.test(
-            v
+            v,
           );
         },
         message: (props) =>
@@ -60,7 +60,7 @@ const WorkExperienceSchema = new mongoose.Schema(
       },
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // check if startDate is less than endDate on save
@@ -70,7 +70,7 @@ WorkExperienceSchema.pre("save", function (next) {
     const end = Date.parse(`01 ${this.endDate}`);
     if (isNaN(start) || isNaN(end)) {
       return next(
-        new Error("Invalid date format. Use 'MMM YYYY', e.g., Jan 2024.")
+        new Error("Invalid date format. Use 'MMM YYYY', e.g., Jan 2024."),
       );
     }
     if (start > end) {
@@ -90,7 +90,7 @@ WorkExperienceSchema.pre("findOneAndUpdate", function (next) {
     const end = Date.parse(`01 ${endDate}`);
     if (isNaN(start) || isNaN(end)) {
       return next(
-        new Error("Invalid date format. Use 'MMM YYYY', e.g., Jan 2024.")
+        new Error("Invalid date format. Use 'MMM YYYY', e.g., Jan 2024."),
       );
     }
     if (start > end) {
@@ -102,7 +102,7 @@ WorkExperienceSchema.pre("findOneAndUpdate", function (next) {
 
 WorkExperienceSchema.index(
   { resume: 1, "company.name": 1, position: 1, startDate: 1 },
-  { unique: true }
+  { unique: true },
 );
 
 // define Work Experience model

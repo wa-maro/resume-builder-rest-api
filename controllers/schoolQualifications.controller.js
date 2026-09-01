@@ -52,7 +52,7 @@ export const addSchoolQualifications = async (req, res) => {
 
     // Check for existing qualification (by level)
     const existingIndex = educationBackground.schoolQualifications.findIndex(
-      (q) => q.level === req.body.level
+      (q) => q.level === req.body.level,
     );
 
     let qualification;
@@ -160,7 +160,7 @@ export const updateSchoolQualification = async (req, res) => {
 
     // Find the qualification to update
     const index = educationBackground.schoolQualifications.findIndex((q) =>
-      q._id.equals(req.params.id)
+      q._id.equals(req.params.id),
     );
     if (index === -1)
       throw new NotFoundError("School qualification doesn't exist");
@@ -181,7 +181,7 @@ export const updateSchoolQualification = async (req, res) => {
         const oldFilePath = path.join(
           __dirname,
           "../uploads/certificates",
-          qualification.certificate
+          qualification.certificate,
         );
         if (fs.existsSync(oldFilePath)) {
           fs.unlinkSync(oldFilePath);
@@ -224,7 +224,7 @@ export const deleteSchoolQualification = async (req, res) => {
   const originalLength = educationBackground.schoolQualifications.length;
   educationBackground.schoolQualifications =
     educationBackground.schoolQualifications.filter(
-      (q) => !q._id.equals(req.params.id)
+      (q) => !q._id.equals(req.params.id),
     );
 
   if (educationBackground.schoolQualifications.length === originalLength)

@@ -23,24 +23,24 @@ skillRouter
     upload.single("certificate"),
     skillNormalizeBody,
     validate({ body: addSkillBodySchema, params: paramsWithIDsSchema }),
-    tryCatch(addSkill, "addSkill")
+    tryCatch(addSkill, "addSkill"),
   )
   .get(
     "/",
     validate({ params: paramsWithIDsSchema }),
-    tryCatch(getSkills, "getSkills")
+    tryCatch(getSkills, "getSkills"),
   )
   .patch(
     "/:id",
     upload.single("certificate"),
     skillNormalizeBody,
     validate({ body: updateSkillBodySchema, params: paramsWithIDsSchema }),
-    tryCatch(updateSkill, "updateSkill")
+    tryCatch(updateSkill, "updateSkill"),
   )
   .delete(
     "/:id",
     validate({ params: paramsWithIDsSchema }),
-    tryCatch(deleteSkill, "deleteSkill")
+    tryCatch(deleteSkill, "deleteSkill"),
   );
 
 export default skillRouter;

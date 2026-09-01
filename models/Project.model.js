@@ -13,7 +13,7 @@ const ProjectSchema = new mongoose.Schema(
     socialLinks: [{ type: String, trim: true }],
     tools: [{ type: String, trim: true }],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const Project = mongoose.model("Project", ProjectSchema);

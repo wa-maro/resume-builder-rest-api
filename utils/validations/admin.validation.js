@@ -101,8 +101,8 @@ export const editPersonalInfoBodySchema = Joi.object({
         "hearing",
         "mobility",
         "cognitive",
-        "other"
-      )
+        "other",
+      ),
     )
     .custom((value, helpers) => {
       if (value.includes("none") && value.length > 1) {
@@ -154,7 +154,7 @@ export const editSchoolQualificationBodySchema = Joi.object({
     .valid(
       "Primary School Leaving Examination (PSLE)",
       "The Certificate of Secondary Education Examination (CSEE)",
-      "Advanced Certificate of Secondary Education Examination (ACSEE)"
+      "Advanced Certificate of Secondary Education Examination (ACSEE)",
     )
     .messages({
       "any.only": "Award must be one of: PSLE, CSEE, ACSEE.",
@@ -212,7 +212,7 @@ export const editAcademicQualificationBodySchema = Joi.object({
       "Bachelor's",
       "Postgraduate Diploma",
       "Master's",
-      "Doctorate (PhD)"
+      "Doctorate (PhD)",
     )
     .messages({
       "any.only":
@@ -278,7 +278,7 @@ export const editProjectBodySchema = Joi.object({
     .items(
       Joi.string().optional().uri().messages({
         "string.uri": "Link must be a valid URL",
-      })
+      }),
     )
     .optional()
     .unique()

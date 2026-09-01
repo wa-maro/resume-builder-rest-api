@@ -19,22 +19,22 @@ refereeRouter
   .post(
     "/",
     validate({ body: addRefereeBodySchema, params: paramsWithIDsSchema }),
-    tryCatch(addReferee, "addReferee")
+    tryCatch(addReferee, "addReferee"),
   )
   .get(
     "/",
     validate({ params: paramsWithIDsSchema }),
-    tryCatch(getReferees, "getReferees")
+    tryCatch(getReferees, "getReferees"),
   )
   .patch(
     "/:id",
     validate({ body: updateRefereeBodySchema, params: paramsWithIDsSchema }),
-    tryCatch(updateReferee, "updateReferee")
+    tryCatch(updateReferee, "updateReferee"),
   )
   .delete(
     "/:id",
     validate({ params: paramsWithIDsSchema }),
-    tryCatch(deleteReferee, "deleteReferee")
+    tryCatch(deleteReferee, "deleteReferee"),
   );
 
 export default refereeRouter;

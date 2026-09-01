@@ -66,7 +66,7 @@ export const deleteResume = async (req, res) => {
   const resume = await Resume.findByIdAndUpdate(
     id,
     { isActive: false },
-    { new: true }
+    { new: true },
   );
 
   if (!resume) throw new NotFoundError("Resume not found");

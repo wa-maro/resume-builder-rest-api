@@ -6,14 +6,14 @@ export const getSchoolQualifications = async (req, res) => {
 
   const educations = await EducationBackground.find().populate(
     "resume",
-    "_id title"
+    "_id title",
   );
   if (!educations) throw new NotFoundError("Education background not found");
 
   const results = [];
   educations.map((edu) => {
     edu.schoolQualifications.map((q) =>
-      results.push({ ...q.toObject(), resume: edu.resume })
+      results.push({ ...q.toObject(), resume: edu.resume }),
     );
   });
 
@@ -22,7 +22,7 @@ export const getSchoolQualifications = async (req, res) => {
   if (award) results = results.filter((s) => s.award === award);
   if (schoolName)
     results = results.filter((s) =>
-      s.school.name.toLowerCase().includes(schoolName.toLowerCase())
+      s.school.name.toLowerCase().includes(schoolName.toLowerCase()),
     );
 
   // Pagination
@@ -103,7 +103,7 @@ export const deleteSchoolQualification = async (req, res) => {
 
   const originalLength = education.schoolQualifications.length;
   education.schoolQualifications = education.schoolQualifications.filter(
-    (ac) => !ac._id.equals(id)
+    (ac) => !ac._id.equals(id),
   );
 
   if (education.schoolQualifications.length === originalLength)

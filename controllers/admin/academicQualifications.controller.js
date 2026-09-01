@@ -6,15 +6,15 @@ export const getAcademicQualifications = async (req, res) => {
 
   const educations = await EducationBackground.find().populate(
     "resume",
-    "_id title"
+    "_id title",
   );
   if (!educations) throw new NotFoundError("Education background not found");
 
   const results = [];
   educations.map((edu) =>
     edu.academicQualifications.map((q) =>
-      results.push({ ...q.toObject(), resume: edu.resume })
-    )
+      results.push({ ...q.toObject(), resume: edu.resume }),
+    ),
   );
 
   // Filters
@@ -22,7 +22,7 @@ export const getAcademicQualifications = async (req, res) => {
   if (award) results = results.filter((a) => a.award === award);
   if (institutionName)
     results = results.filter((a) =>
-      a.institution.name.toLowerCase().includes(institutionName.toLowerCase())
+      a.institution.name.toLowerCase().includes(institutionName.toLowerCase()),
     );
 
   // Pagination
@@ -90,7 +90,7 @@ export const updateAcademicQualification = async (req, res) => {
       const oldPath = path.join(
         __dirname,
         "../uploads/certificates",
-        academic.certificate
+        academic.certificate,
       );
       if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
     }
@@ -113,7 +113,7 @@ export const updateAcademicQualification = async (req, res) => {
       const oldPath = path.join(
         __dirname,
         "../uploads/transcripts",
-        academic.transcript
+        academic.transcript,
       );
       if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
     }
@@ -143,7 +143,7 @@ export const deleteAcademicQualification = async (req, res) => {
 
   const originalLength = education.academicQualifications.length;
   education.academicQualifications = education.academicQualifications.filter(
-    (ac) => !ac._id.equals(id)
+    (ac) => !ac._id.equals(id),
   );
 
   if (education.academicQualifications.length === originalLength)

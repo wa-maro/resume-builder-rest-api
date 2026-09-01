@@ -29,7 +29,7 @@ resumeRouter
   .post(
     "/",
     validate({ body: createResumeBodySchema }),
-    tryCatch(createResume, "createResume")
+    tryCatch(createResume, "createResume"),
   )
   .get("/", tryCatch(getResume, "getResume"))
   .get("/:resumeId/preview", tryCatch(previewResume, "previewResume"))
@@ -38,12 +38,12 @@ resumeRouter
     upload.single("avatar"),
     normalizeResumeBody,
     validate({ body: updateResumeBodySchema, params: paramsWithIDsSchema }),
-    tryCatch(updateResume, "updateResume")
+    tryCatch(updateResume, "updateResume"),
   )
   .delete(
     "/:resumeId",
     validate({ params: paramsWithIDsSchema }),
-    tryCatch(deleteResume, "deleteResume")
+    tryCatch(deleteResume, "deleteResume"),
   );
 
 resumeRouter

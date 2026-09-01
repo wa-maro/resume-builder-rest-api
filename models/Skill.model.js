@@ -17,7 +17,7 @@ const SkillSchema = new mongoose.Schema(
     proficiency: { type: Number },
     certificate: { type: String, trim: true },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 SkillSchema.index({ resume: 1, category: 1, name: 1 }, { unique: true });

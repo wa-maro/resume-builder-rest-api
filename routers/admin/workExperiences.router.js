@@ -17,7 +17,7 @@ workExperiencesAdminRouter
   .patch(
     "/:id",
     validate(editWorkExperienceBodySchema),
-    tryCatch(updateWorkExperience, "updateWorkExperience")
+    tryCatch(updateWorkExperience, "updateWorkExperience"),
   )
   .delete("/:id", tryCatch(deleteWorkExperience, "deleteWorkExperience"));
 

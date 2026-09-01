@@ -29,12 +29,12 @@ academicQualificationsRouter
       body: addAcademicQualificationBodySchema,
       params: paramsWithIDsSchema,
     }),
-    tryCatch(addAcademicQualification, "addAcademicQualification")
+    tryCatch(addAcademicQualification, "addAcademicQualification"),
   )
   .get(
     "/",
     validate({ params: paramsWithIDsSchema }),
-    tryCatch(getAcademicQualifications, "getAcademicQualifications")
+    tryCatch(getAcademicQualifications, "getAcademicQualifications"),
   )
   .patch(
     "/:id",
@@ -47,12 +47,12 @@ academicQualificationsRouter
       body: updateAcademicQualificationBodySchema,
       params: paramsWithIDsSchema,
     }),
-    tryCatch(updateAcademicQualification, "updateAcademicQualification")
+    tryCatch(updateAcademicQualification, "updateAcademicQualification"),
   )
   .delete(
     "/:id",
     validate({ params: paramsWithIDsSchema }),
-    tryCatch(deleteAcademicQualification, "deleteAcademicQualification")
+    tryCatch(deleteAcademicQualification, "deleteAcademicQualification"),
   );
 
 export default academicQualificationsRouter;

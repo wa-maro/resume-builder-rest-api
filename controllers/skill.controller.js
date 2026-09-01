@@ -122,7 +122,7 @@ export const updateSkill = async (req, res) => {
         _id: req.params.id,
       },
       updateData,
-      { new: true }
+      { new: true },
     );
     if (!existingSkill) throw new NotFoundError("Skill not found");
 

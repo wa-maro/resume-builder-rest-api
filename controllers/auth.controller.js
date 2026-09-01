@@ -66,7 +66,7 @@ export const getAccount = async (req, res) => {
   const { username } = req.params;
 
   const user = await User.findOne({ username, isActive: true }).select(
-    "-password"
+    "-password",
   );
   if (!user) throw new NotFoundError("User not found");
 

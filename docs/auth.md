@@ -76,10 +76,10 @@ Content-Type: application/json
 
 **Request Body:**
 
-| Field             | Type   | Required | Description                  |
-| ----------------- | ------ | -------- | ---------------------------- |
+| Field           | Type   | Required | Description                  |
+| --------------- | ------ | -------- | ---------------------------- |
 | usernameOrEmail | String | ✅       | Registered username or email |
-| password          | String | ✅       | Associated account password  |
+| password        | String | ✅       | Associated account password  |
 
 **Response:**
 
@@ -87,7 +87,7 @@ Content-Type: application/json
 {
   "success": true,
   "message": "User logged in successfully",
-   "user": {
+  "user": {
     "id": "680ccc5029c28a166080a99b",
     "username": "johndoe",
     "role": "user"

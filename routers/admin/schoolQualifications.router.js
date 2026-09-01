@@ -21,11 +21,11 @@ schoolsAdminRouter
     upload.single("certificate"),
     normalizeSchoolBody,
     validate(editSchoolQualificationBodySchema),
-    tryCatch(updateSchoolQualification, "updateSchoolQualification")
+    tryCatch(updateSchoolQualification, "updateSchoolQualification"),
   )
   .delete(
     "/:id",
-    tryCatch(deleteSchoolQualification, "deleteSchoolQualification")
+    tryCatch(deleteSchoolQualification, "deleteSchoolQualification"),
   );
 
 export default schoolsAdminRouter;

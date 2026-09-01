@@ -77,7 +77,7 @@ export async function updateReferee(req, res) {
       _id: req.params.id,
     },
     { ...req.body },
-    { new: true }
+    { new: true },
   );
   if (!existingReferee) throw new NotFoundError("Referee Not Found");
 

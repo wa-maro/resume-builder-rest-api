@@ -7,7 +7,7 @@ const FAQSchema = new mongoose.Schema(
     order: { type: Number, default: 0 }, // optional: for sorting
     isActive: { type: Boolean, default: true }, // optional: toggle visibility
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const FAQ = mongoose.model("FAQ", FAQSchema);

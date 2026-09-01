@@ -15,7 +15,7 @@ const MessageSchema = new mongoose.Schema(
     isReplied: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const Message = mongoose.model("Message", MessageSchema);

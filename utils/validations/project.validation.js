@@ -14,7 +14,7 @@ export const addProjectBodySchema = Joi.object({
     .items(
       Joi.string().uri().messages({
         "string.uri": "Link must be a valid URL",
-      })
+      }),
     )
     .unique()
     .messages({
@@ -37,7 +37,7 @@ export const updateProjectBodySchema = Joi.object({
     .items(
       Joi.string().optional().uri().messages({
         "string.uri": "Link must be a valid URL",
-      })
+      }),
     )
     .optional()
     .unique()

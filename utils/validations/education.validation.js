@@ -31,7 +31,7 @@ export const addSchoolQualificationBodySchema = Joi.object({
     .valid(
       "Primary School Leaving Examination (PSLE)",
       "The Certificate of Secondary Education Examination (CSEE)",
-      "Advanced Certificate of Secondary Education Examination (ACSEE)"
+      "Advanced Certificate of Secondary Education Examination (ACSEE)",
     )
     .required()
     .messages({
@@ -99,7 +99,7 @@ export const updateSchoolQualificationBodySchema = Joi.object({
     .valid(
       "Primary School Leaving Examination (PSLE)",
       "The Certificate of Secondary Education Examination (CSEE)",
-      "Advanced Certificate of Secondary Education Examination (ACSEE)"
+      "Advanced Certificate of Secondary Education Examination (ACSEE)",
     )
     .messages({
       "any.only": "Award must be one of: PSLE, CSEE, ACSEE.",
@@ -179,7 +179,7 @@ export const addAcademicQualificationBodySchema = Joi.object({
       "Bachelor's",
       "Postgraduate Diploma",
       "Master's",
-      "Doctorate (PhD)"
+      "Doctorate (PhD)",
     )
     .required()
     .messages({
@@ -252,7 +252,7 @@ export const updateAcademicQualificationBodySchema = Joi.object({
       "Bachelor's",
       "Postgraduate Diploma",
       "Master's",
-      "Doctorate (PhD)"
+      "Doctorate (PhD)",
     )
     .messages({
       "any.only":

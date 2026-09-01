@@ -64,7 +64,7 @@ export const addAcademicQualification = async (req, res) => {
         q.level === req.body.level &&
         q.award.trim().toLowerCase() === req.body.award.trim().toLowerCase() &&
         q.institution.name.trim().toLowerCase() ===
-          req.body.institution.name.trim().toLowerCase()
+          req.body.institution.name.trim().toLowerCase(),
     );
     if (isDuplicate)
       throw new ConflictError(`Duplicate ${req.body.level} qualification`);
@@ -151,7 +151,7 @@ export const updateAcademicQualification = async (req, res) => {
 
     // Find the academic qualification to update
     const index = educationBackground.academicQualifications.findIndex((q) =>
-      q._id.equals(req.params.id)
+      q._id.equals(req.params.id),
     );
     if (index === -1)
       throw new NotFoundError("Academic qualification doesn't exist");
@@ -173,7 +173,7 @@ export const updateAcademicQualification = async (req, res) => {
         const oldPath = path.join(
           __dirname,
           "../uploads/certificates",
-          qualification.certificate
+          qualification.certificate,
         );
         if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
       }
@@ -196,7 +196,7 @@ export const updateAcademicQualification = async (req, res) => {
         const oldPath = path.join(
           __dirname,
           "../uploads/transcripts",
-          qualification.transcript
+          qualification.transcript,
         );
         if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
       }
@@ -237,7 +237,7 @@ export const deleteAcademicQualification = async (req, res) => {
   const originalLength = educationBackground.academicQualifications.length;
   educationBackground.academicQualifications =
     educationBackground.academicQualifications.filter(
-      (q) => !q._id.equals(req.params.id)
+      (q) => !q._id.equals(req.params.id),
     );
 
   if (educationBackground.academicQualifications.length === originalLength)

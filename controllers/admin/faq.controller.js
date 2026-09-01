@@ -53,7 +53,7 @@ export const updateFAQ = async (req, res) => {
   const updatedFAQ = await FAQ.findByIdAndUpdate(
     id,
     { question, answer, order, isActive },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   );
   if (!updatedFAQ) throw new NotFoundError("FAQ not found");
 
